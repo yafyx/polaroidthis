@@ -6,23 +6,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Loader2,
   Download,
-  PanelLeft,
-  PanelRight,
   RotateCcw,
   Zap,
-  Move,
-  Image as ImageIcon,
+  ImageIcon,
   Type,
   Search,
   FileEdit,
   Film,
+  Settings2,
+  Palette,
+  Info,
 } from "lucide-react";
 import ManualInputForm from "./manual-input-form";
 import TmdbSearchForm from "./tmdb-search-form";
 import PosterPreview from "./poster-preview";
 import { toPng } from "html-to-image";
-import { Card, CardContent } from "@/components/ui/card";
-import { Slider } from "@/components/ui/slider";
 import {
   Tooltip,
   TooltipContent,
@@ -31,6 +29,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export type MovieData = {
   title: string;
@@ -64,40 +63,25 @@ export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
   const [activeTab, setActiveTab] = useState("tmdb");
   const posterRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
-  const [isPanelCollapsed, setIsPanelCollapsed] = useState(false);
-  const [hasSelectedMovie, setHasSelectedMovie] = useState(false);
 
-  // Set initial data if provided
   useEffect(() => {
     if (initialData) {
       setMovieData({
         ...defaultMovieData,
         ...initialData,
       });
-      setHasSelectedMovie(true);
     }
   }, [initialData]);
 
   const handleUpdateMovieData = (data: Partial<MovieData>) => {
     setMovieData((prev) => ({ ...prev, ...data }));
-    // If title is set, consider a movie has been selected
-    if (data.title && data.title.trim() !== "") {
-      setHasSelectedMovie(true);
-    } else if (data.title === "") {
-      setHasSelectedMovie(false);
-    }
   };
 
   const handleGeneratePoster = async () => {
     if (!posterRef.current) return;
-
     setIsGenerating(true);
-
     try {
-      // Temporarily add a class for export to ensure all elements are rendered
       posterRef.current.classList.add("exporting");
-
-      // Allow time for fonts to load and render
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       const dataUrl = await toPng(posterRef.current, {
@@ -110,18 +94,15 @@ export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
           textRendering: "optimizeLegibility",
         },
         filter: (node) => {
-          // Make sure all text nodes are captured
           return true;
         },
       });
 
-      // Remove the temporary class
       posterRef.current.classList.remove("exporting");
 
       const link = document.createElement("a");
       link.href = dataUrl;
 
-      // Create a clean filename from the title
       const filename = movieData.title
         ? `polaroid-${movieData.title
             .toLowerCase()
@@ -129,7 +110,9 @@ export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
         : "polaroid-poster.png";
 
       link.download = filename;
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
     } catch (error) {
       console.error("Error generating poster:", error);
     } finally {
@@ -137,285 +120,171 @@ export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
     }
   };
 
-  const resetPoster = () => {
-    // Reset any other state if needed
+  const resetPosterAndForm = () => {
+    setMovieData(defaultMovieData);
+    setActiveTab("tmdb");
   };
 
-  const isFormValid = movieData.title.trim() !== "";
+  const isFormValid = movieData.title.trim() !== "" || !!movieData.imageFile;
 
   const handleSelectInputMethod = (method: string) => {
     setActiveTab(method);
-    setHasSelectedMovie(true);
   };
 
-  // Input Panel Component
-  const InputPanel = () => (
-    <div className="bg-[#F5F5F7] rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-      <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <Type className="h-5 w-5 text-primary" />
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="font-medium text-sm">Create Poster</h2>
-              <Badge
-                variant="outline"
-                className="uppercase text-[9px] font-medium"
-              >
-                Beta
-              </Badge>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Design a minimalist movie poster in the iconic polaroid style
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center space-x-1">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={resetPoster}
-                >
-                  <RotateCcw className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Reset view</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+  const PanelHeader = ({
+    icon: Icon,
+    title,
+    subtitle,
+    children,
+  }: {
+    icon: React.ElementType;
+    title: string;
+    subtitle?: string;
+    children?: React.ReactNode;
+  }) => (
+    <div className="bg-white border-b border-gray-200/80 px-4 py-3 flex items-center justify-between sticky top-0 z-10">
+      <div className="flex items-center space-x-2.5">
+        <Icon className="h-5 w-5 text-gray-500" />
+        <div>
+          <h2 className="font-semibold text-sm text-gray-800">{title}</h2>
+          {subtitle && <p className="text-xs text-gray-500">{subtitle}</p>}
         </div>
       </div>
-
-      <div className="bg-white h-[calc(100vh-200px)] min-h-[500px] w-full max-w-[500px] mx-auto">
-        <div className="p-4 h-full overflow-y-auto">
-          <Tabs
-            defaultValue={activeTab}
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="tmdb">Search Movie</TabsTrigger>
-              <TabsTrigger value="manual">Manual Input</TabsTrigger>
-            </TabsList>
-            <TabsContent value="tmdb" className="fade-in">
-              <TmdbSearchForm onUpdateMovieData={handleUpdateMovieData} />
-            </TabsContent>
-            <TabsContent value="manual" className="fade-in">
-              <ManualInputForm
-                movieData={movieData}
-                onUpdateMovieData={handleUpdateMovieData}
-              />
-            </TabsContent>
-          </Tabs>
-        </div>
-      </div>
+      <div className="flex items-center space-x-1">{children}</div>
     </div>
   );
 
-  // Canvas Component
-  const CanvasPanel = () => (
-    <div className="bg-[#F5F5F7] rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-      <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <ImageIcon className="h-5 w-5 text-primary" />
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="font-medium text-sm">Canvas</h2>
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Preview and export your movie poster
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center space-x-1">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={resetPoster}
-                >
-                  <RotateCcw className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Reset view</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      </div>
+  const InputPanel = () => (
+    <motion.div
+      className="bg-white rounded-lg overflow-hidden border border-gray-200/80 shadow-sm flex flex-col h-[calc(100vh-120px)] max-h-[800px]"
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3, delay: 0.1 }}
+    >
+      <PanelHeader icon={Type} title="Poster Details"></PanelHeader>
 
-      <div className="h-[calc(100vh-200px)] min-h-[500px] bg-[#F5F5F7] relative">
-        <div
-          ref={canvasRef}
-          className="absolute inset-0 grid place-items-center grid-pattern"
+      <div className="p-5 flex-grow overflow-y-auto">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="w-full flex flex-col h-full"
         >
-          {/* Toolbar - only shown when movie is selected */}
-          <motion.div
-            className="absolute top-4 right-4 flex items-center space-x-2 z-10"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Button
-              onClick={handleGeneratePoster}
-              disabled={!isFormValid || isGenerating}
-              size="sm"
-              className="rounded-full px-3 shadow-md"
+          <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100 p-1 rounded-lg">
+            <TabsTrigger
+              value="tmdb"
+              className="text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
             >
-              {isGenerating ? (
-                <>
-                  <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-                  Exporting...
-                </>
-              ) : (
-                <>
-                  <Download className="mr-1 h-3 w-3" />
-                  Export
-                </>
-              )}
-            </Button>
-          </motion.div>
+              <Search className="h-3.5 w-3.5 mr-1.5" /> Search Movie
+            </TabsTrigger>
+            <TabsTrigger
+              value="manual"
+              className="text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
+            >
+              <FileEdit className="h-3.5 w-3.5 mr-1.5" /> Manual Input
+            </TabsTrigger>
+          </TabsList>
 
-          <AnimatePresence>
+          <AnimatePresence mode="wait">
             <motion.div
-              className="relative"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
+              key={activeTab}
+              initial={{ opacity: 0, x: activeTab === "tmdb" ? -10 : 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: activeTab === "tmdb" ? 10 : -10 }}
+              transition={{ duration: 0.2 }}
+              className="flex-grow"
             >
-              <PosterPreview ref={posterRef} movieData={movieData} />
+              {activeTab === "tmdb" && (
+                <TabsContent value="tmdb" className="mt-0">
+                  <TmdbSearchForm onUpdateMovieData={handleUpdateMovieData} />
+                </TabsContent>
+              )}
+              {activeTab === "manual" && (
+                <TabsContent value="manual" className="mt-0">
+                  <ManualInputForm
+                    movieData={movieData}
+                    onUpdateMovieData={handleUpdateMovieData}
+                  />
+                </TabsContent>
+              )}
             </motion.div>
           </AnimatePresence>
-        </div>
+        </Tabs>
       </div>
-    </div>
+    </motion.div>
   );
 
-  // New standalone Onboarding UI component
-  const OnboardingUI = () => (
+  const CanvasPanel = () => (
     <motion.div
-      className="max-w-4xl mx-auto"
-      initial={{ opacity: 0 }}
+      className="bg-gray-50 rounded-lg overflow-hidden border border-gray-200/80 shadow-sm flex flex-col h-[calc(100vh-120px)] max-h-[800px]"
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.3, delay: 0.2 }}
     >
-      <div className="text-center mb-16">
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          <Film className="h-16 w-16 mx-auto text-primary mb-4" />
-          <h1 className="text-4xl font-bold mb-2">Polaroid This</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Create stylish minimalist movie posters in the iconic polaroid style
-          </p>
-        </motion.div>
-      </div>
-
-      <motion.div
-        className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto"
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-      >
-        <motion.div
-          whileHover={{ y: -8, scale: 1.02 }}
-          transition={{ type: "spring", stiffness: 300 }}
-          className="rounded-2xl overflow-hidden shadow-lg group cursor-pointer bg-white"
-          onClick={() => handleSelectInputMethod("tmdb")}
-        >
-          <div className="h-48 bg-gradient-to-br from-blue-500 to-indigo-600 grid place-items-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all duration-300"></div>
-            <Search className="h-20 w-20 text-white opacity-90" />
-          </div>
-          <div className="p-6">
-            <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-              Search for a Movie
-            </h3>
-            <p className="text-muted-foreground">
-              Find and select a movie from our extensive movie database with
-              cover art and details automatically filled in for you.
-            </p>
-            <div className="mt-4">
+      <PanelHeader icon={Palette} title="Canvas Preview">
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger asChild>
               <Button
-                className="group-hover:bg-primary group-hover:text-white transition-colors"
-                variant="outline"
+                onClick={handleGeneratePoster}
+                disabled={!isFormValid || isGenerating}
+                size="sm"
+                className="bg-primary hover:bg-primary/90 text-white rounded-md px-3 shadow-sm text-xs"
               >
-                Search Movies
-                <motion.div
-                  className="inline-block ml-2"
-                  initial={{ x: 0 }}
-                  whileHover={{ x: 5 }}
-                >
-                  →
-                </motion.div>
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                    Exporting...
+                  </>
+                ) : (
+                  <>
+                    <Download className="mr-1.5 h-3.5 w-3.5" />
+                    Export PNG
+                  </>
+                )}
               </Button>
-            </div>
-          </div>
-        </motion.div>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Export Poster</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </PanelHeader>
 
-        <motion.div
-          whileHover={{ y: -8, scale: 1.02 }}
-          transition={{ type: "spring", stiffness: 300 }}
-          className="rounded-2xl overflow-hidden shadow-lg group cursor-pointer bg-white"
-          onClick={() => handleSelectInputMethod("manual")}
+      <div className="flex-grow bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:30px_30px] opacity-50"></div>
+
+        <div
+          ref={canvasRef}
+          className="absolute inset-0 grid place-items-center p-6"
         >
-          <div className="h-48 bg-gradient-to-br from-amber-500 to-pink-600 grid place-items-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-all duration-300"></div>
-            <FileEdit className="h-20 w-20 text-white opacity-90" />
-          </div>
-          <div className="p-6">
-            <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-              Manual Entry
-            </h3>
-            <p className="text-muted-foreground">
-              Create a custom poster by entering all the details yourself
-              including title, director, stars, and upload your own image.
-            </p>
-            <div className="mt-4">
-              <Button
-                className="group-hover:bg-primary group-hover:text-white transition-colors"
-                variant="outline"
+          <AnimatePresence>
+            {isFormValid && (
+              <motion.div
+                key="poster-preview"
+                className="relative transition-all duration-300 ease-out"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
               >
-                Enter Details
-                <motion.div
-                  className="inline-block ml-2"
-                  initial={{ x: 0 }}
-                  whileHover={{ x: 5 }}
-                >
-                  →
-                </motion.div>
-              </Button>
-            </div>
-          </div>
-        </motion.div>
-      </motion.div>
+                <PosterPreview ref={posterRef} movieData={movieData} />
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-      <div className="text-center mt-10 text-sm text-muted-foreground">
-        <p>
-          Export high-resolution posters in PNG format ready for printing or
-          sharing
-        </p>
+          {!isFormValid && (
+            <div className="text-center text-gray-500">
+              <ImageIcon className="h-12 w-12 mx-auto mb-3 text-gray-400" />
+              <p className="text-sm font-medium">Poster preview appears here</p>
+              <p className="text-xs">
+                Search for a movie or add details manually.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </motion.div>
   );
 
   return (
-    <div className="space-y-6">
-      {!hasSelectedMovie ? (
-        <OnboardingUI />
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <InputPanel />
-          <CanvasPanel />
-        </div>
-      )}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 max-w-screen-xl mx-auto">
+      <InputPanel />
+      <CanvasPanel />
     </div>
   );
 }
