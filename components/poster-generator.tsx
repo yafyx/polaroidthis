@@ -160,7 +160,7 @@ export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3, delay: 0.1 }}
     >
-      <PanelHeader icon={Type} title="Poster Details"></PanelHeader>
+      <PanelHeader icon={Type} title="Details"></PanelHeader>
 
       <div className="p-5 flex-grow overflow-y-auto">
         <Tabs
@@ -218,7 +218,7 @@ export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3, delay: 0.2 }}
     >
-      <PanelHeader icon={Palette} title="Canvas Preview">
+      <PanelHeader icon={Palette} title="Preview">
         <TooltipProvider delayDuration={100}>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -258,9 +258,6 @@ export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
               <motion.div
                 key="poster-preview"
                 className="relative transition-all duration-300 ease-out"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
               >
                 <PosterPreview ref={posterRef} movieData={movieData} />
               </motion.div>
@@ -282,9 +279,13 @@ export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
   );
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 max-w-screen-xl mx-auto">
-      <InputPanel />
-      <CanvasPanel />
+    <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div className="lg:col-span-2">
+        <InputPanel />
+      </div>
+      <div className="lg:col-span-3">
+        <CanvasPanel />
+      </div>
     </div>
   );
 }
