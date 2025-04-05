@@ -285,7 +285,7 @@ export default function PolaroidPoster({
             <div className="h-5"></div>
             {starring && (
               <div className="flex">
-                <span className="w-[60px] text-[12px] flex-shrink-0">
+                <span className="w-[56px] text-[12px] flex-shrink-0">
                   starring
                 </span>
                 <div className="font-din-condensed text-[13px] tracking-normal whitespace-pre-wrap ml-1">

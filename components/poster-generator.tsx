@@ -167,76 +167,138 @@ const CanvasPanel = ({
   posterRef,
   canvasRef,
   movieData,
-}: CanvasPanelProps) => (
-  <motion.div
-    className="bg-gray-50 rounded-lg overflow-hidden border border-gray-200/80 shadow-sm flex flex-col h-[calc(100vh-120px)]"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.3, delay: 0.2 }}
-  >
-    <PanelHeader icon={Palette} title="Preview">
-      <TooltipProvider delayDuration={100}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              onClick={handleGeneratePoster}
-              disabled={!isFormValid || isGenerating}
-              size="sm"
-              className="bg-primary hover:bg-primary/90 text-white rounded-md px-3 shadow-sm text-xs"
-            >
-              {isGenerating ? (
-                <>
-                  <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
-                  Exporting...
-                </>
-              ) : (
-                <>
-                  <Download className="mr-1.5 h-3.5 w-3.5" />
-                  Export PNG
-                </>
-              )}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">Export Poster</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    </PanelHeader>
+}: CanvasPanelProps) => {
+  const [previewScale, setPreviewScale] = useState(1);
 
-    <div className="flex-grow bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e0e0e0_1px,transparent_1px),linear-gradient(to_bottom,#e0e0e0_1px,transparent_1px)] bg-[size:30px_30px] opacity-100"></div>
+  useEffect(() => {
+    const calculateScale = () => {
+      if (
+        canvasRef.current &&
+        posterRef.current &&
+        isFormValid &&
+        posterRef.current.offsetWidth > 0 &&
+        posterRef.current.offsetHeight > 0
+      ) {
+        const containerWidth = canvasRef.current.offsetWidth;
+        const containerHeight = canvasRef.current.offsetHeight;
+        const contentWidth = posterRef.current.offsetWidth;
+        const contentHeight = posterRef.current.offsetHeight;
 
-      <div
-        ref={canvasRef}
-        className="absolute inset-0 grid place-items-center p-6"
-      >
-        <AnimatePresence>
-          {isFormValid && (
-            <motion.div
-              key="poster-preview" // Keep animation for poster appearance
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="relative"
-            >
-              <PosterPreview ref={posterRef} movieData={movieData} />
-            </motion.div>
+        // Add some padding (e.g., 60px total, 30px on each side) to the container size
+        const effectiveContainerWidth = containerWidth - 60;
+        const effectiveContainerHeight = containerHeight - 60;
+
+        const scaleX = effectiveContainerWidth / contentWidth;
+        const scaleY = effectiveContainerHeight / contentHeight;
+
+        setPreviewScale(Math.min(scaleX, scaleY, 1)); // Use the smaller scale, don't scale up beyond 1
+      } else {
+        setPreviewScale(1); // Reset scale
+      }
+    };
+
+    calculateScale(); // Initial calculation
+
+    const containerElement = canvasRef.current;
+    const contentElement = posterRef.current;
+
+    if (!containerElement || !contentElement || !isFormValid) {
+      // If elements aren't ready or poster isn't shown, reset scale and skip observer
+      setPreviewScale(1);
+      return;
+    }
+
+    const observer = new ResizeObserver(calculateScale);
+    observer.observe(containerElement);
+    // Only observe contentElement if it's expected to be there
+    if (contentElement) {
+      observer.observe(contentElement);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+    // Rerun when refs are assigned, form validity changes (poster appears/disappears)
+    // or movieData changes that might affect poster size (like title length)
+  }, [canvasRef, posterRef, isFormValid, movieData]);
+
+  return (
+    <motion.div
+      className="bg-gray-50 rounded-lg overflow-hidden border border-gray-200/80 shadow-sm flex flex-col h-[calc(100vh-120px)]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3, delay: 0.2 }}
+    >
+      <PanelHeader icon={Palette} title="Preview">
+        <TooltipProvider delayDuration={100}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={handleGeneratePoster}
+                disabled={!isFormValid || isGenerating}
+                size="sm"
+                className="bg-primary hover:bg-primary/90 text-white rounded-md px-3 shadow-sm text-xs"
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                    Exporting...
+                  </>
+                ) : (
+                  <>
+                    <Download className="mr-1.5 h-3.5 w-3.5" />
+                    Export PNG
+                  </>
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Export Poster</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </PanelHeader>
+
+      <div className="flex-grow bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden flex items-center justify-center p-6">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e0e0e0_1px,transparent_1px),linear-gradient(to_bottom,#e0e0e0_1px,transparent_1px)] bg-[size:30px_30px] opacity-100"></div>
+
+        <div
+          ref={canvasRef}
+          className="w-full h-full relative flex items-center justify-center"
+        >
+          <AnimatePresence>
+            {isFormValid && (
+              <motion.div
+                key="poster-preview"
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: previewScale, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                transition={{
+                  duration: 0.3,
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 25,
+                }}
+                className="relative"
+                style={{ transformOrigin: "center center" }}
+              >
+                <PosterPreview ref={posterRef} movieData={movieData} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {!isFormValid && (
+            <div className="text-center text-gray-500">
+              <ImageIcon className="h-12 w-12 mx-auto mb-3 text-gray-400" />
+              <p className="text-sm font-medium">Poster preview appears here</p>
+              <p className="text-xs">
+                Search for a movie or add details manually.
+              </p>
+            </div>
           )}
-        </AnimatePresence>
-
-        {!isFormValid && (
-          <div className="text-center text-gray-500">
-            <ImageIcon className="h-12 w-12 mx-auto mb-3 text-gray-400" />
-            <p className="text-sm font-medium">Poster preview appears here</p>
-            <p className="text-xs">
-              Search for a movie or add details manually.
-            </p>
-          </div>
-        )}
+        </div>
       </div>
-    </div>
-  </motion.div>
-);
+    </motion.div>
+  );
+};
 
 export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
   const [movieData, setMovieData] = useState<MovieData>(defaultMovieData);
