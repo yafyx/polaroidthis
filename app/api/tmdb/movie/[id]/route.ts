@@ -44,7 +44,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
         ?.filter((person: any) => person.job === "Producer")
         .map((person: any) => person.name)
         .slice(0, 3)
-        .join(" ") || "Unknown"
+        .join(", ") || "Unknown"
 
     // Format the response
     const releaseYear = new Date(movieData.release_date).getFullYear()

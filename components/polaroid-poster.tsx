@@ -259,8 +259,8 @@ export default function PolaroidPoster({
             {runningTime && (
               <div className="flex">
                 <span className="w-[60px] text-[12px]">running time</span>
-                <div className="font-din-condensed text-[13px] tracking-normal">
-                  {runningTime}
+                <div className="font-din-condensed text-[13px] tracking-normal whitespace-pre-wrap">
+                  {runningTime.replace(/,/g, "   ")}
                 </div>
               </div>
             )}
@@ -268,8 +268,8 @@ export default function PolaroidPoster({
             {director && (
               <div className="flex">
                 <span className="w-[60px] text-[12px]">directed by</span>
-                <div className="font-din-condensed text-[13px] tracking-normal">
-                  {director}
+                <div className="font-din-condensed text-[13px] tracking-normal whitespace-pre-wrap">
+                  {director.replace(/,/g, "   ")}
                 </div>
               </div>
             )}
@@ -277,8 +277,8 @@ export default function PolaroidPoster({
             {producedBy && (
               <div className="flex">
                 <span className="w-[60px] text-[12px]">produced by </span>
-                <div className="font-din-condensed text-[13px] tracking-normal">
-                  {producedBy}
+                <div className="font-din-condensed text-[13px] tracking-normal whitespace-pre-wrap">
+                  {producedBy.replace(/,/g, "   ")}
                 </div>
               </div>
             )}
@@ -286,8 +286,8 @@ export default function PolaroidPoster({
             {starring && (
               <div className="flex">
                 <span className="w-[60px] text-[12px]">starring</span>
-                <div className="font-din-condensed text-[13px] tracking-normal">
-                  {starring}
+                <div className="font-din-condensed text-[13px] tracking-normal whitespace-pre-wrap">
+                  {starring.replace(/,/g, "   ")}
                 </div>
               </div>
             )}
