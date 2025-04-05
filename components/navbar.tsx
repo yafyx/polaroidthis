@@ -35,32 +35,60 @@ export default function Navbar() {
           : "bg-white/90 backdrop-blur-sm"
       }`}
     >
-      <div className="container mx-auto px-4 py-3">
+      {/* Top border gradient line */}
+      <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+
+      <div className="container mx-auto px-4 py-3 max-w-5xl">
         <div className="flex items-center justify-between h-14">
-          <Link href="/" className="flex items-center space-x-2 z-10 group">
-            <div className="p-1.5">
+          <Link
+            href="/"
+            className="flex items-center space-x-2 z-10 group relative"
+          >
+            {/* Orbital circles around logo */}
+            <div className="absolute -inset-1 rounded-full border border-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute -inset-3 rounded-full border border-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-75"></div>
+
+            <div className="p-1.5 relative">
               <Image
                 src="/polaroidthislogo.svg"
                 alt="polaroidthis Logo"
                 width={80}
                 height={80}
               />
+              {/* Decorative plus in corner of logo */}
+              <div className="absolute -right-1 -bottom-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="w-1.5 h-0.5 bg-primary"></div>
+                <div className="w-0.5 h-1.5 bg-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+              </div>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
+          <nav className="hidden md:flex items-center space-x-1 relative">
+            {/* Replace grid pattern with diagonal lines */}
+            <div className="absolute inset-0 pointer-events-none opacity-5">
+              <div className="absolute top-0 left-0 w-full h-px bg-primary"></div>
+              <div className="absolute bottom-0 left-0 w-full h-px bg-primary"></div>
+              <div className="absolute top-0 left-0 h-full w-px bg-primary"></div>
+              <div className="absolute top-0 right-0 h-full w-px bg-primary"></div>
+              <div className="absolute top-0 left-0 w-full h-full bg-primary/5 transform rotate-45"></div>
+            </div>
+
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 href={item.path}
-                className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-colors 
+                className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-colors relative
                   ${
                     pathname === item.path
                       ? "text-primary bg-primary/5"
                       : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                   }`}
               >
+                {/* Active indicator line */}
+                {pathname === item.path && (
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-primary"></div>
+                )}
                 {item.icon && item.icon}
                 {item.name}
               </Link>
@@ -69,10 +97,14 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden rounded-md p-2 hover:bg-secondary transition-colors"
+            className="md:hidden rounded-md p-2 hover:bg-secondary transition-colors relative"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
+            {/* Decorative corners */}
+            <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-primary/20"></div>
+            <div className="absolute bottom-0 left-0 w-1.5 h-1.5 border-b border-l border-primary/20"></div>
+
             {isMenuOpen ? (
               <X className="h-5 w-5" />
             ) : (
@@ -89,7 +121,7 @@ export default function Navbar() {
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`py-3 px-4 text-sm font-medium rounded-md transition-colors flex items-center gap-2
+                  className={`py-3 px-4 text-sm font-medium rounded-md transition-colors flex items-center gap-2 relative
                     ${
                       pathname === item.path
                         ? "text-primary bg-primary/5"
@@ -97,6 +129,9 @@ export default function Navbar() {
                     }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
+                  {pathname === item.path && (
+                    <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-1/2 bg-primary"></div>
+                  )}
                   {item.icon && item.icon}
                   {item.name}
                 </Link>
