@@ -30,6 +30,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { AnimatedGridPattern } from "./ui/animated-grid-pattern";
 
 export type MovieData = {
   title: string;
@@ -258,7 +259,13 @@ const CanvasPanel = ({
       </PanelHeader>
 
       <div className="flex-grow bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden flex items-center justify-center p-6">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e0e0e0_1px,transparent_1px),linear-gradient(to_bottom,#e0e0e0_1px,transparent_1px)] bg-[size:30px_30px] opacity-100"></div>
+        <AnimatedGridPattern
+          width={30}
+          height={30}
+          className="fill-gray-300/70 stroke-gray-300/70"
+          maxOpacity={0.1}
+          numSquares={25}
+        />
 
         <div
           ref={canvasRef}

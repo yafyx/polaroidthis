@@ -1,6 +1,6 @@
 {
   "name": "polaroidthis",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -49,6 +49,7 @@
     "html2canvas": "latest",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
+    "motion": "^12.6.3",
     "next": "15.2.4",
     "next-themes": "^0.4.4",
     "react": "^19",
