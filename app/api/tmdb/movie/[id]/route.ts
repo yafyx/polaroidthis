@@ -34,7 +34,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     // Extract top actors
     const starring =
       movieData.credits?.cast
-        ?.slice(0, 3)
+        ?.slice(0, 9)
         .map((person: any) => person.name)
         .join(", ") || "Unknown"
 
