@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Film, Menu, Plus, Search, X } from "lucide-react";
+import { Menu, Plus, Search, X } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
@@ -37,10 +38,14 @@ export default function Navbar() {
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between h-14">
           <Link href="/" className="flex items-center space-x-2 z-10 group">
-            <div className="bg-primary rounded-md p-1.5 group-hover:bg-primary/90 transition-colors">
-              <Film className="h-4 w-4 text-white" />
+            <div className="p-1.5">
+              <Image
+                src="/polaroidthislogo.svg"
+                alt="polaroidthis Logo"
+                width={80}
+                height={80}
+              />
             </div>
-            <span className="text-lg font-medium">polaroidthis</span>
           </Link>
 
           {/* Desktop Navigation */}

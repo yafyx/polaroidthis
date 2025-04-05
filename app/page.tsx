@@ -12,9 +12,11 @@ export default function Home() {
         <div className="container mx-auto max-w-5xl">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="flex-1 space-y-4">
-              <h1 className="text-3xl font-bold tracking-tight">
-                create polaroid posters
-              </h1>
+              <div className="flex items-center gap-3">
+                <h1 className="text-3xl font-bold tracking-tight">
+                  create polaroid posters
+                </h1>
+              </div>
               <p className="text-base text-muted-foreground">
                 transform your favorite movies into minimalist polaroid posters
                 with just a few clicks
@@ -68,7 +70,6 @@ export default function Home() {
         <div className="container mx-auto max-w-5xl px-4">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center space-x-2">
-              <Film className="h-5 w-5 text-primary" />
               <h2 className="text-lg font-semibold">Featured Movies</h2>
               <div className="bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full ml-2">
                 TMDB

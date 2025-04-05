@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
 
     // Search for movies
     const response = await fetch(
-      `${TMDB_BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&include_adult=false`,
+      `${TMDB_BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&include_adult=true`,
     )
 
     if (!response.ok) {

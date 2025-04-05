@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Film, Heart, Github, Twitter } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -7,10 +8,14 @@ export default function Footer() {
       <div className="container mx-auto px-4 max-w-5xl">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center space-x-2">
-            <div className="bg-primary rounded-md p-1">
-              <Film className="h-3 w-3 text-white" />
+            <div className="p-1.5">
+              <Image
+                src="/polaroidthislogo.svg"
+                alt="polaroidthis Logo"
+                width={80}
+                height={80}
+              />
             </div>
-            <span className="text-sm font-medium">polaroidthis</span>
           </div>
 
           <div className="flex items-center space-x-6 text-xs text-muted-foreground">
