@@ -238,14 +238,14 @@ export default function PolaroidPoster({
                 <span>{titleParts.wrappedTitle}</span>
                 {year && (
                   <span className="font-arial-narrow text-lg font-light text-black text-opacity-80 inline-block [transform:scaleY(0.8)] pb-2">
-                    {year}
+                    {"\u00A0" + year}
                   </span>
                 )}
               </div>
             )}
             {!titleParts.wrappedTitle && year && (
               <span className="font-arial-narrow text-lg font-light text-black text-opacity-80 inline-block [transform:scaleY(0.8)] pb-2">
-                {year}
+                {"\u00A0" + year}
               </span>
             )}
           </h3>

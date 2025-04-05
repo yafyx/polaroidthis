@@ -13,25 +13,6 @@ export default function AboutPage() {
             create beautiful minimalist movie posters in a Polaroid style.
           </p>
 
-          <h2 className="text-2xl font-semibold mt-8 mb-4">Our Mission</h2>
-          <p>
-            We believe that movie is an art form that deserves to be celebrated.
-            Our mission is to provide a simple tool for movie lovers to create
-            stunning visual representations of their favorite movies.
-          </p>
-
-          <h2 className="text-2xl font-semibold mt-8 mb-4">How It Works</h2>
-          <p>
-            polaroidthis uses the TMDB (The Movie Database) API to fetch
-            accurate movie information, including titles, directors, cast, and
-            poster images. Users can search for any movie in the TMDB database
-            or manually input their own movie details.
-          </p>
-          <p>
-            The application then generates a minimalist poster in a Polaroid
-            style, which can be downloaded and shared.
-          </p>
-
           <h2 className="text-2xl font-semibold mt-8 mb-4">Technology</h2>
           <p>polaroidthis is built with modern web technologies:</p>
           <ul className="list-disc pl-6 space-y-2">
