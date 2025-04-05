@@ -156,7 +156,7 @@ export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
 
   const InputPanel = () => (
     <motion.div
-      className="bg-white rounded-lg overflow-hidden border border-gray-200/80 shadow-sm flex flex-col h-[calc(100vh-120px)] max-h-[800px]"
+      className="bg-white rounded-lg overflow-hidden border border-gray-200/80 shadow-sm flex flex-col h-[calc(100vh-120px)]"
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3, delay: 0.1 }}
     >
@@ -214,7 +214,7 @@ export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
 
   const CanvasPanel = () => (
     <motion.div
-      className="bg-gray-50 rounded-lg overflow-hidden border border-gray-200/80 shadow-sm flex flex-col h-[calc(100vh-120px)] max-h-[800px]"
+      className="bg-gray-50 rounded-lg overflow-hidden border border-gray-200/80 shadow-sm flex flex-col h-[calc(100vh-120px)]"
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3, delay: 0.2 }}
     >
@@ -247,7 +247,7 @@ export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
       </PanelHeader>
 
       <div className="flex-grow bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:30px_30px] opacity-50"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#e0e0e0_1px,transparent_1px),linear-gradient(to_bottom,#e0e0e0_1px,transparent_1px)] bg-[size:30px_30px] opacity-100"></div>
 
         <div
           ref={canvasRef}

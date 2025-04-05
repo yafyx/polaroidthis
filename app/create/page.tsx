@@ -59,7 +59,7 @@ export default function CreatePage() {
         </header>
 
         {/* Content Area */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        <div>
           {isLoading ? (
             <div className="flex justify-center items-center py-20">
               <div className="flex flex-col items-center">
