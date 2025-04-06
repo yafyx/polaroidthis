@@ -4,42 +4,6 @@ import { type NextRequest, NextResponse } from "next/server";
 const TMDB_API_KEY = process.env.TMDB_API_KEY
 const TMDB_BASE_URL = "https://api.themoviedb.org/3"
 
-// Mock data for common titles (used when the title is an ID number)
-interface MockMovieData {
-    title: string;
-    year: string;
-    runningTime: string;
-    director: string;
-    producedBy: string;
-    starring: string;
-    imageUrl: string;
-    service?: string;
-}
-
-const mockMovieData: Record<string, MockMovieData> = {
-    // For testing/demo purposes
-    "81922333": {
-        title: "The Boys",
-        year: "2022",
-        runningTime: "60 MINUTES",
-        director: "ERIC KRIPKE",
-        producedBy: "AMAZON STUDIOS",
-        starring: "KARL URBAN, JACK QUAID, ANTONY STARR, ERIN MORIARTY",
-        imageUrl: "https://image.tmdb.org/t/p/w500/stTEycfG9928HYGEISBFaG1ngjM.jpg",
-        service: "Netflix"
-    },
-    "0SSV1CIYHPUKDFUE5JOYRDKF06": {
-        title: "The Boys",
-        year: "2022",
-        runningTime: "60 MINUTES",
-        director: "ERIC KRIPKE",
-        producedBy: "AMAZON STUDIOS",
-        starring: "KARL URBAN, JACK QUAID, ANTONY STARR, ERIN MORIARTY",
-        imageUrl: "https://image.tmdb.org/t/p/w500/stTEycfG9928HYGEISBFaG1ngjM.jpg",
-        service: "Amazon Prime"
-    }
-};
-
 export async function GET(request: NextRequest) {
     try {
         // Get the title from the URL
@@ -53,15 +17,6 @@ export async function GET(request: NextRequest) {
 
         if (!TMDB_API_KEY) {
             return NextResponse.json({ message: "TMDB API key is not configured" }, { status: 500 })
-        }
-
-        // Check if we have mock data for this ID (for testing)
-        if (mockMovieData[title]) {
-            return NextResponse.json({
-                ...mockMovieData[title],
-                service: service || mockMovieData[title].service,
-                success: true
-            });
         }
 
         // If the title is numeric, it's likely an ID from a streaming service

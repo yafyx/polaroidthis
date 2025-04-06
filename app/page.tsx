@@ -1,8 +1,21 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Film, Plus, Search, Link2 } from "lucide-react";
-import FeaturedMovies from "@/components/featured-movies";
+import {
+  ArrowRight,
+  Film,
+  Plus,
+  Search,
+  Link2,
+  PlayCircle,
+} from "lucide-react";
 import Image from "next/image";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function Home() {
   return (
@@ -46,25 +59,24 @@ export default function Home() {
                   src="/examples/poster1.jpg"
                   alt="Example poster"
                   fill
-                  className="object-cover rounded-md shadow-lg transform -rotate-2 hover:rotate-0 transition-transform duration-300"
+                  className="object-cover rounded-md shadow-lg transform -rotate-2"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-md"></div>
               </div>
               <div className="relative h-[220px] w-[180px] ml-[-60px] mt-4">
                 <Image
                   src="/examples/poster2.jpg"
                   alt="Example poster"
                   fill
-                  className="object-cover rounded-md shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300"
+                  className="object-cover rounded-md shadow-lg transform rotate-3"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-md"></div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-gradient-to-b from-white to-slate-50">
+      {/* Landing Page */}
+      <section className="py-16 px-4 bg-slate-50">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold tracking-tight mb-2">
@@ -79,44 +91,57 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Explanation and Examples */}
-            <div className="space-y-6">
-              <div className="bg-white p-6 rounded-lg shadow-md border border-slate-100">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="bg-primary/10 p-2 rounded-full">
-                    <Link2 className="h-5 w-5 text-primary" />
+          <Card className="border">
+            <CardContent className="p-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* How it Works Section (Left/Top) */}
+              <div className="md:col-span-2 space-y-5">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="bg-primary/10 p-2 rounded-full">
+                      <Link2 className="h-5 w-5 text-primary" />
+                    </div>
+                    <CardTitle className="text-xl font-semibold">
+                      How it Works
+                    </CardTitle>
                   </div>
-                  <h3 className="text-xl font-semibold">How it Works</h3>
+                  <CardDescription>
+                    Simply prepend{" "}
+                    <code className="font-mono text-primary bg-primary/10 px-1 py-0.5 rounded text-xs mx-0.5">
+                      polaroidthis.
+                    </code>{" "}
+                    to any supported streaming service link to automatically
+                    generate a polaroid poster.
+                  </CardDescription>
                 </div>
-                <p className="text-muted-foreground mb-5">
-                  Simply prepend our domain to any supported streaming service
-                  link to automatically generate a polaroid poster. We'll fetch
-                  the title and create the magic!
-                </p>
+
                 <div className="space-y-4">
                   {/* Example 1 */}
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
-                    <span className="font-mono bg-slate-100 px-3 py-1.5 rounded text-xs flex-grow break-all text-center sm:text-left">
+                  <div className="relative flex flex-col sm:flex-row sm:items-center gap-2 text-sm p-3 bg-slate-50/50 rounded-md border border-dashed border-slate-200">
+                    <span className="font-mono bg-white border border-slate-200 px-3 py-1.5 rounded text-xs flex-grow break-all text-center sm:text-left z-10 shadow-sm">
                       netflix.com/title/81922333
                     </span>
-                    <ArrowRight className="h-4 w-4 text-slate-400 shrink-0 mx-auto sm:mx-2" />
-                    <span className="font-mono bg-primary/10 text-primary px-3 py-1.5 rounded text-xs font-medium flex-grow break-all text-center sm:text-left">
+                    <div className="flex-shrink-0 w-full sm:w-auto flex justify-center items-center my-1 sm:my-0">
+                      <ArrowRight className="h-4 w-4 text-slate-500 shrink-0 z-10 bg-slate-50 px-1 animate-pulse" />
+                    </div>
+                    <span className="font-mono bg-primary/10 border border-primary/20 text-primary px-3 py-1.5 rounded text-xs font-medium flex-grow break-all text-center sm:text-left z-10 shadow-sm">
                       polaroidthis.vercel.app/create?url=netflix...
                     </span>
                   </div>
                   {/* Example 2 */}
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
-                    <span className="font-mono bg-slate-100 px-3 py-1.5 rounded text-xs flex-grow break-all text-center sm:text-left">
+                  <div className="relative flex flex-col sm:flex-row sm:items-center gap-2 text-sm p-3 bg-slate-50/50 rounded-md border border-dashed border-slate-200">
+                    <span className="font-mono bg-white border border-slate-200 px-3 py-1.5 rounded text-xs flex-grow break-all text-center sm:text-left z-10 shadow-sm">
                       primevideo.com/detail/0SSV...
                     </span>
-                    <ArrowRight className="h-4 w-4 text-slate-400 shrink-0 mx-auto sm:mx-2" />
-                    <span className="font-mono bg-primary/10 text-primary px-3 py-1.5 rounded text-xs font-medium flex-grow break-all text-center sm:text-left">
+                    <div className="flex-shrink-0 w-full sm:w-auto flex justify-center items-center my-1 sm:my-0">
+                      <ArrowRight className="h-4 w-4 text-slate-500 shrink-0 z-10 bg-slate-50 px-1 animate-pulse" />
+                    </div>
+                    <span className="font-mono bg-primary/10 border border-primary/20 text-primary px-3 py-1.5 rounded text-xs font-medium flex-grow break-all text-center sm:text-left z-10 shadow-sm">
                       polaroidthis.vercel.app/create?url=primevideo...
                     </span>
                   </div>
                 </div>
-                <div className="mt-6 text-center sm:text-left">
+
+                <div className="pt-1 text-center sm:text-left">
                   <Button
                     asChild
                     size="sm"
@@ -130,34 +155,36 @@ export default function Home() {
                   </Button>
                 </div>
               </div>
-            </div>
 
-            {/* Supported Services */}
-            <div className="space-y-5">
-              <h3 className="text-xl font-semibold text-center md:text-left">
-                Supported Streaming Services
-              </h3>
-              <ul className="grid grid-cols-2 gap-x-6 gap-y-3 text-base">
-                {[
-                  "Netflix",
-                  "Amazon Prime",
-                  "Disney+",
-                  "Hulu",
-                  "Max (HBO)",
-                  "Apple TV+",
-                ].map((service) => (
-                  <li key={service} className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary shrink-0"></div>
-                    <span className="text-muted-foreground">{service}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-sm text-slate-600 mt-4 pt-4 border-t border-slate-200">
-                We automatically extract the movie or show details from these
-                services and generate a poster using data from TMDB.
-              </p>
-            </div>
-          </div>
+              {/* Supported Services Section (Right/Bottom) */}
+              <div className="md:col-span-1 space-y-5">
+                <div className="space-y-2">
+                  <CardTitle className="text-xl font-semibold">
+                    Supported Services
+                  </CardTitle>
+                  <p className="text-sm text-slate-600">
+                    We automatically extract movie/show details and generate a
+                    poster using data from TMDB.
+                  </p>
+                </div>
+                <ul className="grid grid-cols-1 gap-y-3.5 text-base">
+                  {[
+                    "Netflix",
+                    "Amazon Prime",
+                    "Disney+",
+                    "Hulu",
+                    "Max (HBO)",
+                    "Apple TV+",
+                  ].map((service) => (
+                    <li key={service} className="flex items-center gap-3">
+                      <PlayCircle className="h-4 w-4 text-primary shrink-0" />
+                      <span className="text-muted-foreground">{service}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
     </div>
