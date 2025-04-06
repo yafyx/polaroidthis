@@ -1,6 +1,6 @@
 {
   "name": "polaroidthis",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -38,7 +38,9 @@
     "@radix-ui/react-toggle-group": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.6",
     "@tailwindcss/typography": "latest",
+    "@types/cheerio": "^0.22.35",
     "autoprefixer": "^10.4.20",
+    "cheerio": "^1.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",

@@ -16,9 +16,11 @@ import {
   Settings2,
   Palette,
   Info,
+  Link2,
 } from "lucide-react";
 import ManualInputForm from "./manual-input-form";
 import TmdbSearchForm from "./tmdb-search-form";
+import UrlInputForm from "./url-input-form";
 import PosterPreview from "./poster-preview";
 import { generatePosterImage, downloadPoster } from "@/lib/poster-export";
 import {
@@ -56,6 +58,7 @@ const defaultMovieData: MovieData = {
 
 interface PosterGeneratorProps {
   initialData?: any;
+  initialTab?: string;
 }
 
 const PanelHeader = ({
@@ -108,12 +111,18 @@ const InputPanel = ({
         onValueChange={setActiveTab}
         className="w-full flex flex-col h-full"
       >
-        <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100 p-1 rounded-lg">
+        <TabsList className="grid w-full grid-cols-3 mb-6 bg-gray-100 p-1 rounded-lg">
           <TabsTrigger
             value="tmdb"
             className="text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
           >
             <Search className="h-3.5 w-3.5 mr-1.5" /> Search Movie
+          </TabsTrigger>
+          <TabsTrigger
+            value="url"
+            className="text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-primary"
+          >
+            <Link2 className="h-3.5 w-3.5 mr-1.5" /> Streaming URL
           </TabsTrigger>
           <TabsTrigger
             value="manual"
@@ -126,15 +135,26 @@ const InputPanel = ({
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
-            initial={{ opacity: 0, x: activeTab === "tmdb" ? -10 : 10 }}
+            initial={{
+              opacity: 0,
+              x: activeTab === "tmdb" ? -10 : activeTab === "url" ? 0 : 10,
+            }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: activeTab === "tmdb" ? 10 : -10 }}
+            exit={{
+              opacity: 0,
+              x: activeTab === "tmdb" ? 10 : activeTab === "url" ? 0 : -10,
+            }}
             transition={{ duration: 0.2 }}
             className="flex-grow"
           >
             {activeTab === "tmdb" && (
               <TabsContent value="tmdb" className="mt-0">
                 <TmdbSearchForm onUpdateMovieData={handleUpdateMovieData} />
+              </TabsContent>
+            )}
+            {activeTab === "url" && (
+              <TabsContent value="url" className="mt-0">
+                <UrlInputForm onUpdateMovieData={handleUpdateMovieData} />
               </TabsContent>
             )}
             {activeTab === "manual" && (
@@ -307,17 +327,24 @@ const CanvasPanel = ({
   );
 };
 
-export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
+export default function PosterGenerator({
+  initialData,
+  initialTab = "tmdb",
+}: PosterGeneratorProps) {
+  const posterRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLDivElement | null>(null);
   const [movieData, setMovieData] = useState<MovieData>(defaultMovieData);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [activeTab, setActiveTab] = useState("tmdb");
-  const posterRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLDivElement>(null);
+  const [isPosterReset, setIsPosterReset] = useState(false);
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  // Compute form validity based on movie data
+  const isFormValid = movieData.title.trim() !== "" || !!movieData.imageFile;
 
   useEffect(() => {
     if (initialData) {
       setMovieData({
-        ...defaultMovieData,
+        ...movieData,
         ...initialData,
       });
     }
@@ -347,8 +374,6 @@ export default function PosterGenerator({ initialData }: PosterGeneratorProps) {
     setMovieData(defaultMovieData);
     setActiveTab("tmdb");
   };
-
-  const isFormValid = movieData.title.trim() !== "" || !!movieData.imageFile;
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">

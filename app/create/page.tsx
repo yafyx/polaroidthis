@@ -8,14 +8,23 @@ import { ImageIcon, Loader2 } from "lucide-react";
 export default function CreatePage() {
   const searchParams = useSearchParams();
   const movieId = searchParams.get("movie");
-  const [isLoading, setIsLoading] = useState(!!movieId);
+  const url = searchParams.get("url");
+  const tab = searchParams.get("tab");
+  const [isLoading, setIsLoading] = useState(!!movieId || !!url);
   const [initialMovieData, setInitialMovieData] = useState(null);
+  const [initialTab, setInitialTab] = useState(tab || "tmdb");
 
   useEffect(() => {
     if (movieId) {
       fetchMovieDetails(movieId);
+      setInitialTab("tmdb");
+    } else if (url) {
+      processUrl(url);
+      setInitialTab("url");
+    } else if (tab) {
+      setInitialTab(tab);
     }
-  }, [movieId]);
+  }, [movieId, url, tab]);
 
   const fetchMovieDetails = async (id: string) => {
     setIsLoading(true);
@@ -26,6 +35,66 @@ export default function CreatePage() {
       setInitialMovieData(data);
     } catch (error) {
       console.error("Error fetching movie:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const processUrl = async (urlPath: string) => {
+    setIsLoading(true);
+    try {
+      // Add protocol and domain to make it a valid URL
+      const fullUrl = `https://example.com${urlPath}`;
+
+      // First try scraping the title
+      let extractedTitle = null;
+      let extractedService = null;
+
+      const scrapeResponse = await fetch(
+        `/api/scrape-title?url=${encodeURIComponent(fullUrl)}`
+      );
+
+      if (scrapeResponse.ok) {
+        const scrapeData = await scrapeResponse.json();
+        if (scrapeData.success) {
+          extractedTitle = scrapeData.title;
+          extractedService = scrapeData.service;
+        }
+      }
+
+      // If scraping failed, fall back to basic extraction
+      if (!extractedTitle) {
+        // Extract information from URL
+        const extractResponse = await fetch(
+          `/api/extract-url?url=${encodeURIComponent(fullUrl)}`
+        );
+        const extractData = await extractResponse.json();
+
+        if (!extractResponse.ok || !extractData.success) {
+          throw new Error(
+            extractData.message || "Unable to extract details from this URL"
+          );
+        }
+
+        extractedTitle = extractData.title;
+        extractedService = extractData.service;
+      }
+
+      // Search TMDB with the extracted title
+      const searchResponse = await fetch(
+        `/api/tmdb/find-by-title?title=${encodeURIComponent(
+          extractedTitle
+        )}&service=${encodeURIComponent(extractedService || "")}`
+      );
+      const movieData = await searchResponse.json();
+
+      if (!searchResponse.ok || !movieData.success) {
+        throw new Error(movieData.message || "Movie details not found");
+      }
+
+      setInitialMovieData(movieData);
+    } catch (error) {
+      console.error("URL processing error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -53,7 +122,7 @@ export default function CreatePage() {
           <div className="flex gap-2 items-center">
             <div className="inline-block px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-sm text-xs text-slate-600">
               <span className="font-medium">Tip:</span> Search for your favorite
-              movie or enter details manually
+              movie, use a streaming URL, or enter details manually
             </div>
           </div>
         </header>
@@ -77,7 +146,10 @@ export default function CreatePage() {
               </div>
             </div>
           ) : (
-            <PosterGenerator initialData={initialMovieData} />
+            <PosterGenerator
+              initialData={initialMovieData}
+              initialTab={initialTab}
+            />
           )}
         </div>
 
