@@ -18,7 +18,6 @@ export default function UrlInputForm({ onUpdateMovieData }: UrlInputFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [service, setService] = useState<string | null>(null);
-  const [urlPrefixed, setUrlPrefixed] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUrl(e.target.value);
@@ -49,9 +48,6 @@ export default function UrlInputForm({ onUpdateMovieData }: UrlInputFormProps) {
       // Create polaroidthis URL
       try {
         const urlObj = new URL(processedUrl);
-        setUrlPrefixed(
-          `https://polaroidthis.vercel.app${urlObj.pathname}${urlObj.search}`
-        );
       } catch (e) {
         console.error("URL parsing error:", e);
       }
@@ -159,15 +155,6 @@ export default function UrlInputForm({ onUpdateMovieData }: UrlInputFormProps) {
         <div className="flex items-center space-x-2 text-xs">
           <span className="text-slate-500">Detected:</span>
           <Badge variant="outline">{service}</Badge>
-        </div>
-      )}
-
-      {urlPrefixed && (
-        <div className="p-3 bg-slate-50 rounded border border-slate-200 text-sm">
-          <div className="font-medium text-xs text-slate-500 mb-1">
-            Your PolaroidThis URL:
-          </div>
-          <code className="text-xs text-blue-600 break-all">{urlPrefixed}</code>
         </div>
       )}
 
