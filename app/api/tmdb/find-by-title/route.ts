@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
             let searchQuery = title; // Use the original title for searching
             // NOTE: Removed the `${service} popular` logic as it was problematic
 
-            // Search movies
+            // Search movies - Removed language parameter for broader matching
             const movieSearchUrl = `${TMDB_BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(searchQuery)}&include_adult=true`;
             console.log("Movie Search URL:", movieSearchUrl);
             const response = await fetch(movieSearchUrl);
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
             }
             const movieData = await response.json();
 
-            // Search TV shows if no movies found - No language parameter specified
+            // Search TV shows if no movies found - Removed language parameter
             searchResults = movieData.results;
             if (searchResults.length === 0) {
                 const tvSearchUrl = `${TMDB_BASE_URL}/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(searchQuery)}&include_adult=true`;
@@ -86,16 +86,15 @@ export async function GET(request: NextRequest) {
 
             const result = foundResult || searchResults[0]; // Use foundResult if available, otherwise fallback to search result
 
-            // Fetch details - Added language parameter
-            const lang = 'en-US'; // Default language - can be made dynamic later
+            // Fetch details - Removed language parameter to get original language details
             const isTV = result.media_type === 'tv' || result.name; // Check if it has a 'name' field typical for TV shows
             const detailsEndpoint = isTV ? 'tv' : 'movie';
-            const detailsUrl = `${TMDB_BASE_URL}/${detailsEndpoint}/${result.id}?api_key=${TMDB_API_KEY}&append_to_response=credits&language=${lang}`; // Added language
+            const detailsUrl = `${TMDB_BASE_URL}/${detailsEndpoint}/${result.id}?api_key=${TMDB_API_KEY}&append_to_response=credits`; // Reverted to no language param
             console.log("Details URL:", detailsUrl);
             const detailsResponse = await fetch(detailsUrl);
 
             if (!detailsResponse.ok) {
-                throw new Error(`Failed to fetch ${isTV ? 'TV show' : 'movie'} details (lang: ${lang})`); // Added lang to error
+                throw new Error(`Failed to fetch ${isTV ? 'TV show' : 'movie'} details`);
             }
             const detailsData = await detailsResponse.json();
 
