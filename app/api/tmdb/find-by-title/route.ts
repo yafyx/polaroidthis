@@ -47,6 +47,7 @@ export async function GET(request: NextRequest) {
         }
 
         // If not a numeric ID OR the /find endpoint failed/found nothing, use the search endpoints
+        let searchResults: any[] = []; // Initialize searchResults
         if (!foundResult) {
             console.log('Numeric ID not found or service not Netflix, falling back to search.');
             let searchQuery = title; // Use the original title for searching
@@ -63,7 +64,7 @@ export async function GET(request: NextRequest) {
             const movieData = await response.json();
 
             // Search TV shows if no movies found - No language parameter specified
-            let searchResults = movieData.results;
+            searchResults = movieData.results;
             if (searchResults.length === 0) {
                 const tvSearchUrl = `${TMDB_BASE_URL}/search/tv?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(searchQuery)}&include_adult=true`;
                 console.log("TV Search URL:", tvSearchUrl);
@@ -85,15 +86,16 @@ export async function GET(request: NextRequest) {
 
             const result = foundResult || searchResults[0]; // Use foundResult if available, otherwise fallback to search result
 
-            // Fetch details - No language parameter specified
+            // Fetch details - Added language parameter
+            const lang = 'en-US'; // Default language - can be made dynamic later
             const isTV = result.media_type === 'tv' || result.name; // Check if it has a 'name' field typical for TV shows
             const detailsEndpoint = isTV ? 'tv' : 'movie';
-            const detailsUrl = `${TMDB_BASE_URL}/${detailsEndpoint}/${result.id}?api_key=${TMDB_API_KEY}&append_to_response=credits`;
+            const detailsUrl = `${TMDB_BASE_URL}/${detailsEndpoint}/${result.id}?api_key=${TMDB_API_KEY}&append_to_response=credits&language=${lang}`; // Added language
             console.log("Details URL:", detailsUrl);
             const detailsResponse = await fetch(detailsUrl);
 
             if (!detailsResponse.ok) {
-                throw new Error(`Failed to fetch ${isTV ? 'TV show' : 'movie'} details`);
+                throw new Error(`Failed to fetch ${isTV ? 'TV show' : 'movie'} details (lang: ${lang})`); // Added lang to error
             }
             const detailsData = await detailsResponse.json();
 
