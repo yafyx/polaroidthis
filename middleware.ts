@@ -4,6 +4,15 @@ import { NextResponse } from 'next/server';
 export function middleware(request: NextRequest) {
     const { pathname, search } = request.nextUrl;
 
+    // Check if the pathname starts with /http: or /https:
+    if (pathname.startsWith('/http:') || pathname.startsWith('/https:')) {
+        // Extract the URL (remove the leading '/')
+        const originalUrl = pathname.substring(1) + search;
+        const encodedUrl = encodeURIComponent(originalUrl);
+        // Redirect to the create page
+        return NextResponse.redirect(new URL(`/create?url=${encodedUrl}`, request.url));
+    }
+
     // If this is already on our domain, we're not in redirection mode
     if (request.headers.has('x-forwarded-host')) {
         const host = request.headers.get('x-forwarded-host') || '';
@@ -34,17 +43,4 @@ export function middleware(request: NextRequest) {
     }
 
     return NextResponse.next();
-}
-
-// Only run the middleware on paths that might be streaming service paths
-export const config = {
-    matcher: [
-        '/title/:path*',
-        '/watch/:path*',
-        '/detail/:path*',
-        '/movie/:path*',
-        '/movies/:path*',
-        '/tv/:path*',
-        '/series/:path*',
-    ],
-}; 
+} 

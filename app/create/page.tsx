@@ -40,18 +40,18 @@ export default function CreatePage() {
     }
   };
 
-  const processUrl = async (urlPath: string) => {
+  const processUrl = async (encodedUrlFromQuery: string) => {
     setIsLoading(true);
     try {
-      // Add protocol and domain to make it a valid URL
-      const fullUrl = `https://example.com${urlPath}`;
+      // Decode the URL passed from the middleware
+      const decodedUrl = decodeURIComponent(encodedUrlFromQuery);
 
-      // First try scraping the title
+      // First try scraping the title using the correct, decoded URL
       let extractedTitle = null;
       let extractedService = null;
 
       const scrapeResponse = await fetch(
-        `/api/scrape-title?url=${encodeURIComponent(fullUrl)}`
+        `/api/scrape-title?url=${encodeURIComponent(decodedUrl)}`
       );
 
       if (scrapeResponse.ok) {
@@ -64,9 +64,9 @@ export default function CreatePage() {
 
       // If scraping failed, fall back to basic extraction
       if (!extractedTitle) {
-        // Extract information from URL
+        // Extract information from URL using the correct, decoded URL
         const extractResponse = await fetch(
-          `/api/extract-url?url=${encodeURIComponent(fullUrl)}`
+          `/api/extract-url?url=${encodeURIComponent(decodedUrl)}`
         );
         const extractData = await extractResponse.json();
 
