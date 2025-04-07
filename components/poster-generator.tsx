@@ -399,40 +399,40 @@ export default function PosterGenerator({
                 <PosterPreview ref={posterRef} movieData={movieData} />
               </motion.div>
             )}
+          </div>
 
-            {/* Desktop toolbar - hidden on mobile */}
-            <div className="absolute top-1/2 right-0 -mr-[10rem] -translate-y-1/2 flex flex-col items-start gap-2 z-50 md:flex">
-              <FloatingActionButton
-                icon={Search}
-                label="Search Movie"
-                isActive={activePanel === "tmdb"}
-                onClick={() => togglePanel("tmdb")}
-                color="bg-blue-50"
-              />
+          {/* Desktop toolbar */}
+          <div className="absolute right-36 top-1/2 -translate-y-1/2 flex-col items-start gap-2 z-50 hidden md:flex">
+            <FloatingActionButton
+              icon={Search}
+              label="Search Movie"
+              isActive={activePanel === "tmdb"}
+              onClick={() => togglePanel("tmdb")}
+              color="bg-blue-50"
+            />
 
-              <FloatingActionButton
-                icon={Link2}
-                label="URL"
-                isActive={activePanel === "url"}
-                onClick={() => togglePanel("url")}
-                color="bg-green-50"
-              />
+            <FloatingActionButton
+              icon={Link2}
+              label="URL"
+              isActive={activePanel === "url"}
+              onClick={() => togglePanel("url")}
+              color="bg-green-50"
+            />
 
-              <FloatingActionButton
-                icon={FileEdit}
-                label="Edit"
-                isActive={activePanel === "manual"}
-                onClick={() => togglePanel("manual")}
-                color="bg-purple-50"
-              />
+            <FloatingActionButton
+              icon={FileEdit}
+              label="Edit"
+              isActive={activePanel === "manual"}
+              onClick={() => togglePanel("manual")}
+              color="bg-purple-50"
+            />
 
-              <FloatingActionButton
-                icon={Upload}
-                label="Upload"
-                onClick={triggerFileInput}
-                color="bg-amber-50"
-              />
-            </div>
+            <FloatingActionButton
+              icon={Upload}
+              label="Upload"
+              onClick={triggerFileInput}
+              color="bg-amber-50"
+            />
           </div>
 
           {/* Mobile floating action button */}
