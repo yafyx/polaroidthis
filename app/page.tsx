@@ -83,11 +83,10 @@ export default function Home() {
               Instantly Create from URLs
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Just add{" "}
+              Just add your streaming URL to{" "}
               <code className="font-mono text-primary bg-primary/10 px-1.5 py-0.5 rounded text-base mx-1">
-                polaroidthis.
-              </code>{" "}
-              to the beginning of a streaming service URL.
+                polaroidthis.tech
+              </code>
             </p>
           </div>
 
@@ -105,11 +104,11 @@ export default function Home() {
                     </CardTitle>
                   </div>
                   <CardDescription>
-                    Simply prepend{" "}
+                    Visit{" "}
                     <code className="font-mono text-primary bg-primary/10 px-1 py-0.5 rounded text-xs mx-0.5">
-                      polaroidthis.
+                      polaroidthis.tech
                     </code>{" "}
-                    to any supported streaming service link to automatically
+                    and paste your streaming service link to automatically
                     generate a polaroid poster.
                   </CardDescription>
                 </div>
@@ -118,25 +117,25 @@ export default function Home() {
                   {/* Example 1 */}
                   <div className="relative flex flex-col sm:flex-row sm:items-center gap-2 text-sm p-3 bg-slate-50/50 rounded-md border border-dashed border-slate-200">
                     <span className="font-mono bg-white border border-slate-200 px-3 py-1.5 rounded text-xs flex-grow break-all text-center sm:text-left z-10 shadow-sm">
-                      netflix.com/title/81922333
+                      netflix.com/title/...
                     </span>
                     <div className="flex-shrink-0 w-full sm:w-auto flex justify-center items-center my-1 sm:my-0">
                       <ArrowRight className="h-4 w-4 text-slate-500 shrink-0 z-10 bg-slate-50 px-1 animate-pulse" />
                     </div>
                     <span className="font-mono bg-primary/10 border border-primary/20 text-primary px-3 py-1.5 rounded text-xs font-medium flex-grow break-all text-center sm:text-left z-10 shadow-sm">
-                      polaroidthis.vercel.app/create?url=netflix...
+                      polaroidthis.tech/netflix.com/title/...
                     </span>
                   </div>
                   {/* Example 2 */}
                   <div className="relative flex flex-col sm:flex-row sm:items-center gap-2 text-sm p-3 bg-slate-50/50 rounded-md border border-dashed border-slate-200">
                     <span className="font-mono bg-white border border-slate-200 px-3 py-1.5 rounded text-xs flex-grow break-all text-center sm:text-left z-10 shadow-sm">
-                      primevideo.com/detail/0SSV...
+                      primevideo.com/detail/...
                     </span>
                     <div className="flex-shrink-0 w-full sm:w-auto flex justify-center items-center my-1 sm:my-0">
                       <ArrowRight className="h-4 w-4 text-slate-500 shrink-0 z-10 bg-slate-50 px-1 animate-pulse" />
                     </div>
                     <span className="font-mono bg-primary/10 border border-primary/20 text-primary px-3 py-1.5 rounded text-xs font-medium flex-grow break-all text-center sm:text-left z-10 shadow-sm">
-                      polaroidthis.vercel.app/create?url=primevideo...
+                      polaroidthis.tech/primevideo.com/detail/...
                     </span>
                   </div>
                 </div>
