@@ -73,9 +73,29 @@ export default function TmdbSearchForm({
       const response = await fetch(
         `/api/tmdb/search?query=${encodeURIComponent(query)}`
       );
-      if (!response.ok) throw new Error("Search failed");
 
-      const data = await response.json();
+      // Check content type before trying to parse JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        console.error("Invalid response type:", contentType);
+        throw new Error(
+          "Invalid API response. Please check your TMDB API configuration."
+        );
+      }
+
+      // Safely parse JSON
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error("JSON parsing error:", parseError);
+        throw new Error("Failed to parse search response");
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || "Search failed");
+      }
+
       setSearchResults(data);
     } catch (error) {
       console.error("Search error:", error);
@@ -111,7 +131,24 @@ export default function TmdbSearchForm({
 
     try {
       const response = await fetch(`/api/tmdb/movie/${movieId}`);
-      const data = await response.json();
+
+      // Check content type before trying to parse JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        console.error("Invalid response type:", contentType);
+        throw new Error(
+          "Invalid API response. Please check your TMDB API configuration."
+        );
+      }
+
+      // Safely parse JSON
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error("JSON parsing error:", parseError);
+        throw new Error("Failed to parse movie details response");
+      }
 
       if (!response.ok) {
         throw new Error(data.message || "Failed to fetch movie data");
@@ -240,10 +277,10 @@ export default function TmdbSearchForm({
                           <img
                             src={`https://image.tmdb.org/t/p/w92${movie.posterPath}`}
                             alt={movie.title}
-                            className="h-14 w-10 object-cover rounded-2xl"
+                            className="h-14 w-10 object-cover"
                           />
                         ) : (
-                          <div className="h-14 w-10 bg-muted rounded-2xl flex items-center justify-center">
+                          <div className="h-14 w-10 bg-muted flex items-center justify-center">
                             <Film className="h-4 w-4 text-muted-foreground" />
                           </div>
                         )}

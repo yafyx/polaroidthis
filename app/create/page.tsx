@@ -30,8 +30,31 @@ export default function CreatePage() {
     setIsLoading(true);
     try {
       const response = await fetch(`/api/tmdb/movie/${id}`);
-      if (!response.ok) throw new Error("Failed to fetch movie");
-      const data = await response.json();
+
+      // Check content type before trying to parse JSON
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        console.error("Invalid response type:", contentType);
+        throw new Error(
+          "Invalid API response. Please check your TMDB API configuration."
+        );
+      }
+
+      // Safely parse JSON with error handling
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error("JSON parsing error:", parseError);
+        throw new Error(
+          "Failed to parse API response. Please check your TMDB API configuration."
+        );
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch movie");
+      }
+
       setInitialMovieData(data);
     } catch (error) {
       console.error("Error fetching movie:", error);
@@ -54,12 +77,33 @@ export default function CreatePage() {
         `/api/scrape-title?url=${encodeURIComponent(decodedUrl)}`
       );
 
-      if (scrapeResponse.ok) {
-        const scrapeData = await scrapeResponse.json();
-        if (scrapeData.success) {
-          extractedTitle = scrapeData.title;
-          extractedService = scrapeData.service;
-        }
+      // Check content type before trying to parse JSON
+      const scrapeContentType = scrapeResponse.headers.get("content-type");
+      if (
+        !scrapeContentType ||
+        !scrapeContentType.includes("application/json")
+      ) {
+        console.error(
+          "Invalid response type from scrape API:",
+          scrapeContentType
+        );
+        throw new Error(
+          "Invalid API response from scrape endpoint. Please check your API configuration."
+        );
+      }
+
+      // Safely parse JSON
+      let scrapeData;
+      try {
+        scrapeData = await scrapeResponse.json();
+      } catch (parseError) {
+        console.error("JSON parsing error from scrape API:", parseError);
+        throw new Error("Failed to parse scrape API response.");
+      }
+
+      if (scrapeResponse.ok && scrapeData.success) {
+        extractedTitle = scrapeData.title;
+        extractedService = scrapeData.service;
       }
 
       // If scraping failed, fall back to basic extraction
@@ -68,7 +112,30 @@ export default function CreatePage() {
         const extractResponse = await fetch(
           `/api/extract-url?url=${encodeURIComponent(decodedUrl)}`
         );
-        const extractData = await extractResponse.json();
+
+        // Check content type before trying to parse JSON
+        const extractContentType = extractResponse.headers.get("content-type");
+        if (
+          !extractContentType ||
+          !extractContentType.includes("application/json")
+        ) {
+          console.error(
+            "Invalid response type from extract API:",
+            extractContentType
+          );
+          throw new Error(
+            "Invalid API response from extract endpoint. Please check your API configuration."
+          );
+        }
+
+        // Safely parse JSON
+        let extractData;
+        try {
+          extractData = await extractResponse.json();
+        } catch (parseError) {
+          console.error("JSON parsing error from extract API:", parseError);
+          throw new Error("Failed to parse extract API response.");
+        }
 
         if (!extractResponse.ok || !extractData.success) {
           throw new Error(
@@ -86,7 +153,32 @@ export default function CreatePage() {
           extractedTitle
         )}&service=${encodeURIComponent(extractedService || "")}`
       );
-      const movieData = await searchResponse.json();
+
+      // Check content type before trying to parse JSON
+      const searchContentType = searchResponse.headers.get("content-type");
+      if (
+        !searchContentType ||
+        !searchContentType.includes("application/json")
+      ) {
+        console.error(
+          "Invalid response type from TMDB API:",
+          searchContentType
+        );
+        throw new Error(
+          "Invalid API response from TMDB. Please check your TMDB API configuration."
+        );
+      }
+
+      // Safely parse JSON
+      let movieData;
+      try {
+        movieData = await searchResponse.json();
+      } catch (parseError) {
+        console.error("JSON parsing error from TMDB API:", parseError);
+        throw new Error(
+          "Failed to parse TMDB API response. Please check your API configuration."
+        );
+      }
 
       if (!searchResponse.ok || !movieData.success) {
         throw new Error(movieData.message || "Movie details not found");

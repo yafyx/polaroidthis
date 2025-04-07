@@ -18,11 +18,35 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       `${TMDB_BASE_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}&append_to_response=credits`,
     )
 
+    // Check if response is not JSON
+    const contentType = movieResponse.headers.get("content-type")
+    if (!contentType || !contentType.includes("application/json")) {
+      console.error("Invalid response type:", contentType)
+      return NextResponse.json(
+        { message: "Invalid API response. Please check your TMDB API key configuration." },
+        { status: 500 }
+      )
+    }
+
     if (!movieResponse.ok) {
-      throw new Error("Failed to fetch movie details")
+      const errorData = await movieResponse.json().catch(() => ({ status_message: "Unknown error" }))
+      console.error("TMDB API error:", errorData)
+      return NextResponse.json(
+        { message: `TMDB API error: ${errorData.status_message}` },
+        { status: movieResponse.status }
+      )
     }
 
     const movieData = await movieResponse.json()
+
+    // Validate required fields
+    if (!movieData.title || !movieData.release_date || !movieData.runtime || !movieData.credits) {
+      console.error("Invalid movie data format:", movieData)
+      return NextResponse.json(
+        { message: "Invalid movie data format from TMDB API" },
+        { status: 500 }
+      )
+    }
 
     // Extract director from crew
     const director =
@@ -61,7 +85,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     return NextResponse.json(formattedData)
   } catch (error) {
     console.error("TMDB API error:", error)
-    return NextResponse.json({ message: "Failed to fetch movie data" }, { status: 500 })
+    return NextResponse.json(
+      { message: "Failed to fetch movie data. Please check your API configuration." },
+      { status: 500 }
+    )
   }
 }
 

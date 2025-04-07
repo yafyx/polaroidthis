@@ -33,8 +33,23 @@ export async function GET(request: NextRequest) {
         `${TMDB_BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&include_adult=true`,
       )
 
+      // Check if response is not JSON
+      const searchContentType = searchResponse.headers.get("content-type")
+      if (!searchContentType || !searchContentType.includes("application/json")) {
+        console.error("Invalid search response type:", searchContentType)
+        return NextResponse.json(
+          { message: "Invalid API response. Please check your TMDB API key configuration." },
+          { status: 500 }
+        )
+      }
+
       if (!searchResponse.ok) {
-        throw new Error("Failed to search for movie")
+        const errorData = await searchResponse.json().catch(() => ({ status_message: "Unknown error" }))
+        console.error("TMDB API search error:", errorData)
+        return NextResponse.json(
+          { message: `TMDB API error: ${errorData.status_message}` },
+          { status: searchResponse.status }
+        )
       }
 
       const searchData = await searchResponse.json()
@@ -52,8 +67,23 @@ export async function GET(request: NextRequest) {
       `${TMDB_BASE_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}&append_to_response=credits`,
     )
 
+    // Check if response is not JSON
+    const movieContentType = movieResponse.headers.get("content-type")
+    if (!movieContentType || !movieContentType.includes("application/json")) {
+      console.error("Invalid movie response type:", movieContentType)
+      return NextResponse.json(
+        { message: "Invalid API response. Please check your TMDB API key configuration." },
+        { status: 500 }
+      )
+    }
+
     if (!movieResponse.ok) {
-      throw new Error("Failed to fetch movie details")
+      const errorData = await movieResponse.json().catch(() => ({ status_message: "Unknown error" }))
+      console.error("TMDB API movie error:", errorData)
+      return NextResponse.json(
+        { message: `TMDB API error: ${errorData.status_message}` },
+        { status: movieResponse.status }
+      )
     }
 
     const movieData = await movieResponse.json()
@@ -68,7 +98,7 @@ export async function GET(request: NextRequest) {
     // Extract top actors
     const starring =
       movieData.credits?.cast
-        ?.slice(0, 3)
+        ?.slice(0, 9)
         .map((person: any) => person.name)
         .join(", ") || "Unknown"
 
@@ -78,7 +108,7 @@ export async function GET(request: NextRequest) {
         ?.filter((person: any) => person.job === "Producer")
         .map((person: any) => person.name)
         .slice(0, 3)
-        .join(" ") || "Unknown"
+        .join(", ") || "Unknown"
 
     // Format the response
     const releaseYear = new Date(movieData.release_date).getFullYear()
@@ -95,7 +125,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(formattedData)
   } catch (error) {
     console.error("TMDB API error:", error)
-    return NextResponse.json({ message: "Failed to fetch movie data" }, { status: 500 })
+    return NextResponse.json(
+      { message: "Failed to fetch movie data. Please check your API configuration." },
+      { status: 500 }
+    )
   }
 }
 

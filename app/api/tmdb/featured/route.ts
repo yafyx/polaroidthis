@@ -14,11 +14,34 @@ export async function GET() {
     // Fetch popular movies
     const response = await fetch(`${TMDB_BASE_URL}/movie/popular?api_key=${TMDB_API_KEY}&language=en-US&page=1`)
 
+    // Check if response is not JSON
+    const contentType = response.headers.get("content-type")
+    if (!contentType || !contentType.includes("application/json")) {
+      console.error("Invalid response type:", contentType)
+      return NextResponse.json(
+        { message: "Invalid API response. Please check your TMDB API key configuration." },
+        { status: 500 }
+      )
+    }
+
     if (!response.ok) {
-      throw new Error("Failed to fetch popular movies")
+      const errorData = await response.json().catch(() => ({ status_message: "Unknown error" }))
+      console.error("TMDB API error:", errorData)
+      return NextResponse.json(
+        { message: `TMDB API error: ${errorData.status_message}` },
+        { status: response.status }
+      )
     }
 
     const data = await response.json()
+
+    if (!data.results || !Array.isArray(data.results)) {
+      console.error("Invalid TMDB API response format:", data)
+      return NextResponse.json(
+        { message: "Invalid response format from TMDB API" },
+        { status: 500 }
+      )
+    }
 
     // Format the response
     const featuredMovies = data.results.slice(0, 6).map((movie: any) => ({
@@ -33,7 +56,10 @@ export async function GET() {
     return NextResponse.json(featuredMovies)
   } catch (error) {
     console.error("TMDB API error:", error)
-    return NextResponse.json({ message: "Failed to fetch featured movies" }, { status: 500 })
+    return NextResponse.json(
+      { message: "Failed to fetch featured movies. Please check your API configuration." },
+      { status: 500 }
+    )
   }
 }
 
