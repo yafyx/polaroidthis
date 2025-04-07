@@ -50,6 +50,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export type MovieData = {
   title: string;
@@ -134,9 +142,27 @@ const DraggableDialog = ({
   children,
 }: DraggableDialogProps) => {
   const [position, setPosition] = useState(initialPosition);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dialogRef.current &&
+        !dialogRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [onClose]);
 
   return (
     <motion.div
+      ref={dialogRef}
       drag
       dragMomentum={false}
       initial={{ opacity: 0, ...initialPosition }}
@@ -206,15 +232,25 @@ export default function PosterGenerator({
         const contentWidth = 386; // Standard polaroid width
         const contentHeight = 550; // Approximate standard polaroid height
 
-        // Calculate available space, accounting for toolbar
-        const effectiveContainerWidth = containerWidth - 140;
-        const effectiveContainerHeight = containerHeight - 40;
+        // Calculate available space, accounting for toolbar and margins
+        // Applying different constraints for mobile vs desktop
+        const isMobile = window.innerWidth < 768;
+
+        // More conservative scaling for mobile
+        const effectiveContainerWidth = isMobile
+          ? containerWidth * 0.85
+          : containerWidth - 140;
+
+        const effectiveContainerHeight = isMobile
+          ? containerHeight * 0.85
+          : containerHeight - 40;
 
         const scaleX = effectiveContainerWidth / contentWidth;
         const scaleY = effectiveContainerHeight / contentHeight;
 
-        // Use consistent scaling regardless of content state
-        setPreviewScale(Math.min(scaleX, scaleY, 1));
+        // Use more conservative scaling, but allow more zoom on mobile
+        const maxScale = isMobile ? 0.95 : 1;
+        setPreviewScale(Math.min(scaleX, scaleY, maxScale));
       }
     };
 
@@ -226,8 +262,12 @@ export default function PosterGenerator({
     const observer = new ResizeObserver(calculateScale);
     observer.observe(containerElement);
 
+    // Also recalculate on window resize for better responsiveness
+    window.addEventListener("resize", calculateScale);
+
     return () => {
       observer.disconnect();
+      window.removeEventListener("resize", calculateScale);
     };
   }, [canvasRef]);
 
@@ -304,17 +344,17 @@ export default function PosterGenerator({
   };
 
   return (
-    <div className="bg-gray-50 rounded-2xl overflow-hidden border border-gray-200/80 shadow-sm flex flex-col h-[calc(100vh-120px)]">
-      <div className="bg-white border-b border-gray-200/80 px-4 py-3 flex items-center justify-between sticky top-0 z-10">
+    <Card className="flex flex-col h-[calc(100vh-120px)] overflow-hidden rounded-2xl shadow-sm border border-gray-200/80">
+      <CardHeader className="px-4 py-3 bg-white border-b border-gray-200/80 sticky top-0 z-10 flex-row flex justify-between items-center space-y-0 gap-x-2">
         <div className="flex items-center space-x-2.5">
-          <Palette className="h-5 w-5 text-gray-500" />
+          <Palette className="h-5 w-5 text-gray-500 hidden sm:block" />
           <div>
-            <h2 className="font-semibold text-sm text-gray-800">
+            <CardTitle className="font-semibold text-sm text-gray-800">
               Poster Canvas
-            </h2>
-            <p className="text-xs text-gray-500">
+            </CardTitle>
+            <CardDescription className="text-xs hidden sm:block">
               Use the toolbar to edit your poster
-            </p>
+            </CardDescription>
           </div>
         </div>
         <div className="flex items-center space-x-2">
@@ -322,7 +362,7 @@ export default function PosterGenerator({
             onClick={resetPosterAndForm}
             variant="outline"
             size="sm"
-            className="rounded-full text-xs h-8"
+            className="rounded-full text-xs h-8 hidden sm:flex"
             disabled={!isFormValid || isGenerating}
           >
             <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
@@ -337,19 +377,21 @@ export default function PosterGenerator({
             {isGenerating ? (
               <>
                 <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
-                Exporting...
+                <span className="sm:inline hidden">Exporting...</span>
+                <span className="sm:hidden inline">Export</span>
               </>
             ) : (
               <>
                 <Download className="mr-1.5 h-3.5 w-3.5" />
-                Export PNG
+                <span className="sm:inline hidden">Export PNG</span>
+                <span className="sm:hidden inline">Export</span>
               </>
             )}
           </Button>
         </div>
-      </div>
+      </CardHeader>
 
-      <div className="flex-grow relative overflow-hidden flex flex-col items-center justify-center p-6">
+      <CardContent className="flex-grow relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-6">
         <AnimatedGridPattern
           width={30}
           height={30}
@@ -393,7 +435,7 @@ export default function PosterGenerator({
                   stiffness: 200,
                   damping: 25,
                 }}
-                className="relative"
+                className="relative max-w-full max-h-full"
                 style={{ transformOrigin: "center center" }}
               >
                 <PosterPreview ref={posterRef} movieData={movieData} />
@@ -402,7 +444,7 @@ export default function PosterGenerator({
           </div>
 
           {/* Desktop toolbar */}
-          <div className="absolute right-36 top-1/2 -translate-y-1/2 flex-col items-start gap-2 z-50 hidden md:flex">
+          <div className="absolute right-4 md:right-36 top-1/2 -translate-y-1/2 flex-col items-start gap-2 z-50 hidden md:flex">
             <FloatingActionButton
               icon={Search}
               label="Search Movie"
@@ -435,15 +477,15 @@ export default function PosterGenerator({
             />
           </div>
 
-          {/* Mobile floating action button */}
-          <div className="md:hidden absolute bottom-4 right-4 z-50">
+          {/* Mobile floating action button - moved to top */}
+          <div className="md:hidden absolute top-4 right-4 z-50">
             <Sheet open={isMobileSheetOpen} onOpenChange={setIsMobileSheetOpen}>
               <SheetTrigger asChild>
                 <Button
                   size="icon"
-                  className="h-12 w-12 rounded-full shadow-lg bg-primary text-white hover:bg-primary/90"
+                  className="h-10 w-10 rounded-full shadow-lg bg-primary text-white hover:bg-primary/90"
                 >
-                  <Plus className="h-6 w-6" />
+                  <Plus className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
               <SheetContent
@@ -621,7 +663,7 @@ export default function PosterGenerator({
             )}
           </AnimatePresence>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

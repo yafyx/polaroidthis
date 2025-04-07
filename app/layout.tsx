@@ -37,6 +37,13 @@ export const metadata: Metadata = {
     "film art generator",
     "cinema poster maker",
     "retro movie posters",
+    "pinterest movie posters",
+    "movie poster generator",
+    "movie poster maker",
+    "movie poster design",
+    "movie poster template",
+    "movie poster generator",
+    "movie poster maker",
   ],
   authors: [{ name: "yfyx" }],
   openGraph: {
