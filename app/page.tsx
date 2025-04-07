@@ -120,7 +120,8 @@ export default function Home() {
                       netflix.com/title/...
                     </span>
                     <div className="flex-shrink-0 w-full sm:w-auto flex justify-center items-center my-1 sm:my-0">
-                      <ArrowRight className="h-4 w-4 text-slate-500 shrink-0 z-10 bg-slate-50 px-1 animate-pulse" />
+                      <ArrowRight className="hidden sm:block h-4 w-4 text-slate-500 shrink-0 z-10 bg-slate-50 px-1 animate-pulse" />
+                      <ArrowRight className="block sm:hidden h-4 w-4 text-slate-500 shrink-0 z-10 bg-slate-50 px-1 animate-pulse rotate-90" />
                     </div>
                     <span className="font-mono bg-primary/10 border border-primary/20 text-primary px-3 py-1.5 rounded text-xs font-medium flex-grow break-all text-center sm:text-left z-10 shadow-sm">
                       polaroidthis.tech/netflix.com/title/...
@@ -132,7 +133,8 @@ export default function Home() {
                       primevideo.com/detail/...
                     </span>
                     <div className="flex-shrink-0 w-full sm:w-auto flex justify-center items-center my-1 sm:my-0">
-                      <ArrowRight className="h-4 w-4 text-slate-500 shrink-0 z-10 bg-slate-50 px-1 animate-pulse" />
+                      <ArrowRight className="hidden sm:block h-4 w-4 text-slate-500 shrink-0 z-10 bg-slate-50 px-1 animate-pulse" />
+                      <ArrowRight className="block sm:hidden h-4 w-4 text-slate-500 shrink-0 z-10 bg-slate-50 px-1 animate-pulse rotate-90" />
                     </div>
                     <span className="font-mono bg-primary/10 border border-primary/20 text-primary px-3 py-1.5 rounded text-xs font-medium flex-grow break-all text-center sm:text-left z-10 shadow-sm">
                       polaroidthis.tech/primevideo.com/detail/...

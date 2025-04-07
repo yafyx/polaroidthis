@@ -194,27 +194,13 @@ export default function CreatePage() {
 
   return (
     <div className="bg-slate-50 min-h-[calc(100vh-4rem)]">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
         {/* Header Section */}
-        <header className="mb-8 flex items-start justify-between flex-wrap gap-4">
-          <div className="flex items-center space-x-3">
-            <div className="p-2.5 bg-white rounded-xl border border-slate-200 shadow-sm">
-              <ImageIcon className="h-5 w-5 text-slate-700" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-slate-800">
-                Create Poster
-              </h1>
-              <p className="text-slate-500 text-sm">
-                Design your perfect movie polaroid
-              </p>
-            </div>
-          </div>
-
+        <header className="mb-4 flex items-start justify-between flex-wrap gap-4">
           <div className="flex gap-2 items-center">
             <div className="inline-block px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-sm text-xs text-slate-600">
-              <span className="font-medium">Tip:</span> Search for your favorite
-              movie, use a streaming URL, or enter details manually
+              <span className="font-medium">Tip:</span> Click the floating
+              buttons around the poster to edit
             </div>
           </div>
         </header>

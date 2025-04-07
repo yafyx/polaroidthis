@@ -23,7 +23,11 @@ const PosterPreview = forwardRef<HTMLDivElement, PosterPreviewProps>(
     const isMovieSelected = title.trim() !== "";
 
     return (
-      <div ref={ref} className="w-full max-w-[386px] mx-auto relative">
+      <div
+        ref={ref}
+        className="relative w-full max-w-[386px] mx-auto"
+        style={{ minHeight: "200px" }}
+      >
         {/* Main poster component */}
         {isMovieSelected ? (
           <PolaroidPoster
@@ -49,8 +53,7 @@ const PosterPreview = forwardRef<HTMLDivElement, PosterPreviewProps>(
                     No Movie Selected
                   </p>
                   <p className="text-xs text-gray-500">
-                    Use the sidebar to search for a movie or enter details
-                    manually
+                    Click one of the floating buttons to get started
                   </p>
                 </div>
               </div>
