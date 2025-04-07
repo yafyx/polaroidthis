@@ -23,7 +23,10 @@ const PosterPreview = forwardRef<HTMLDivElement, PosterPreviewProps>(
     const isMovieSelected = title.trim() !== "";
 
     return (
-      <div ref={ref} className="w-full max-w-[386px] mx-auto relative">
+      <div
+        ref={ref}
+        className="w-full max-w-[386px] mx-auto relative rounded-2xl"
+      >
         {/* Main poster component */}
         {isMovieSelected ? (
           <PolaroidPoster
@@ -37,7 +40,7 @@ const PosterPreview = forwardRef<HTMLDivElement, PosterPreviewProps>(
             producedBy={producedBy}
             starring={starring}
             showDetails={true}
-            className="w-full relative shadow-lg"
+            className="w-full relative shadow-lg rounded-2xl"
           />
         ) : (
           <div className="bg-[#dddad3] px-[22px] py-[20.5px] shadow-md w-full relative select-none">

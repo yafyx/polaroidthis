@@ -24,7 +24,6 @@ export default function Navbar() {
   const navItems = [
     { name: "Create", path: "/create", icon: <Plus className="h-4 w-4" /> },
     { name: "Explore", path: "/explore", icon: <Search className="h-4 w-4" /> },
-    { name: "About", path: "/about" },
   ];
 
   return (
@@ -65,30 +64,24 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1 relative">
-            {/* Replace grid pattern with diagonal lines */}
-            <div className="absolute inset-0 pointer-events-none opacity-5">
-              <div className="absolute top-0 left-0 w-full h-px bg-primary"></div>
-              <div className="absolute bottom-0 left-0 w-full h-px bg-primary"></div>
-              <div className="absolute top-0 left-0 h-full w-px bg-primary"></div>
-              <div className="absolute top-0 right-0 h-full w-px bg-primary"></div>
-              <div className="absolute top-0 left-0 w-full h-full bg-primary/5 transform rotate-45"></div>
-            </div>
-
+            {/* Removed diagonal lines background div */}
             {navItems.map((item) => (
               <Link
                 key={item.path}
                 href={item.path}
-                className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1.5 transition-colors relative
+                className={`px-3 py-2 text-sm font-medium flex items-center gap-1.5 rounded-md transition-all duration-200 relative
                   ${
                     pathname === item.path
-                      ? "text-primary bg-primary/5"
-                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                      ? "text-primary bg-primary/10" // Updated active style
+                      : "text-muted-foreground hover:text-primary hover:bg-primary/5" // Updated hover style
                   }`}
               >
-                {/* Active indicator line */}
-                {pathname === item.path && (
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-primary"></div>
-                )}
+                {/* Active indicator line with transition */}
+                <span
+                  className={`absolute -bottom-[1px] left-1/2 transform -translate-x-1/2 w-1/2 h-[2px] bg-primary transition-opacity duration-200 ${
+                    pathname === item.path ? "opacity-100" : "opacity-0"
+                  }`}
+                ></span>
                 {item.icon && item.icon}
                 {item.name}
               </Link>
@@ -121,17 +114,20 @@ export default function Navbar() {
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`py-3 px-4 text-sm font-medium rounded-md transition-colors flex items-center gap-2 relative
+                  className={`py-3 px-4 text-sm font-medium rounded-md transition-all duration-200 flex items-center gap-2 relative
                     ${
                       pathname === item.path
-                        ? "text-primary bg-primary/5"
-                        : "text-muted-foreground hover:bg-secondary/50"
+                        ? "text-primary bg-primary/10" // Consistent active style
+                        : "text-muted-foreground hover:text-primary hover:bg-primary/5" // Consistent hover style
                     }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {pathname === item.path && (
-                    <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-0.5 h-1/2 bg-primary"></div>
-                  )}
+                  {/* Active indicator line with transition */}
+                  <span
+                    className={`absolute left-0 top-1/2 transform -translate-y-1/2 w-[3px] h-1/2 bg-primary rounded-r-full transition-opacity duration-200 ${
+                      pathname === item.path ? "opacity-100" : "opacity-0"
+                    }`}
+                  ></span>
                   {item.icon && item.icon}
                   {item.name}
                 </Link>

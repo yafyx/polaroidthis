@@ -98,7 +98,7 @@ const InputPanel = ({
   handleUpdateMovieData,
 }: InputPanelProps) => (
   <motion.div
-    className="bg-white rounded-lg overflow-hidden border border-gray-200/80 shadow-sm flex flex-col h-[calc(100vh-120px)]"
+    className="bg-white rounded-2xl overflow-hidden border border-gray-200/80 shadow-sm flex flex-col h-[calc(100vh-120px)]"
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ duration: 0.3, delay: 0.1 }}
@@ -245,7 +245,7 @@ const CanvasPanel = ({
 
   return (
     <motion.div
-      className="bg-gray-50 rounded-lg overflow-hidden border border-gray-200/80 shadow-sm flex flex-col h-[calc(100vh-120px)]"
+      className="bg-gray-50 rounded-2xl overflow-hidden border border-gray-200/80 shadow-sm flex flex-col h-[calc(100vh-120px)]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3, delay: 0.2 }}
@@ -258,7 +258,7 @@ const CanvasPanel = ({
                 onClick={handleGeneratePoster}
                 disabled={!isFormValid || isGenerating}
                 size="sm"
-                className="bg-primary hover:bg-primary/90 text-white rounded-md px-3 shadow-sm text-xs"
+                className="bg-primary hover:bg-primary/90 text-white rounded-2xl px-3 shadow-sm text-xs"
               >
                 {isGenerating ? (
                   <>

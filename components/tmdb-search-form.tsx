@@ -181,8 +181,11 @@ export default function TmdbSearchForm({
               <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[300px] md:w-[400px] p-0" align="start">
-            <Command className="rounded-lg overflow-hidden">
+          <PopoverContent
+            className="w-[300px] md:w-[400px] p-0 rounded-2xl"
+            align="start"
+          >
+            <Command className="rounded-2xl overflow-hidden">
               <CommandInput
                 placeholder="Type a movie title..."
                 value={searchQuery}
@@ -237,10 +240,10 @@ export default function TmdbSearchForm({
                           <img
                             src={`https://image.tmdb.org/t/p/w92${movie.posterPath}`}
                             alt={movie.title}
-                            className="h-14 w-10 object-cover rounded"
+                            className="h-14 w-10 object-cover rounded-2xl"
                           />
                         ) : (
-                          <div className="h-14 w-10 bg-muted rounded flex items-center justify-center">
+                          <div className="h-14 w-10 bg-muted rounded-2xl flex items-center justify-center">
                             <Film className="h-4 w-4 text-muted-foreground" />
                           </div>
                         )}
@@ -278,7 +281,7 @@ export default function TmdbSearchForm({
       )}
 
       {selectedMovie && !isLoading && (
-        <Card className="bg-secondary/30 border-0 slide-up overflow-hidden">
+        <Card className="bg-secondary/30 border-0 rounded-2xl slide-up overflow-hidden">
           <CardContent className="p-4">
             <div className="flex space-x-3">
               {selectedMovie.posterPath ? (

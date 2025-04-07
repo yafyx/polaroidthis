@@ -34,7 +34,7 @@ export default function Home() {
                 with just a few clicks
               </p>
               <div className="flex space-x-3 pt-2">
-                <Button asChild size="lg" className="gap-2 px-4">
+                <Button asChild size="lg" className="gap-2 px-4 rounded-2xl">
                   <Link href="/create">
                     <Plus className="h-4 w-4" />
                     create poster
@@ -44,7 +44,7 @@ export default function Home() {
                   asChild
                   size="lg"
                   variant="outline"
-                  className="gap-2 px-4"
+                  className="gap-2 px-4 rounded-2xl"
                 >
                   <Link href="/explore">
                     <Search className="h-4 w-4" />
@@ -145,7 +145,7 @@ export default function Home() {
                     asChild
                     size="sm"
                     variant="default"
-                    className="gap-1.5"
+                    className="gap-1.5 rounded-2xl"
                   >
                     <Link href="/create?tab=url">
                       <Link2 className="h-3.5 w-3.5" />

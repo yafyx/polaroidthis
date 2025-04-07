@@ -159,7 +159,7 @@ export default function UrlInputForm({ onUpdateMovieData }: UrlInputFormProps) {
       )}
 
       {error && (
-        <Alert variant="destructive" className="py-2">
+        <Alert variant="destructive" className="py-2 rounded-2xl">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription className="text-xs ml-2">{error}</AlertDescription>
         </Alert>
