@@ -179,6 +179,30 @@
   background: #aaa;
 }
 
+/* Custom scrollbar for dialog content */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d1d1 transparent;
+  overflow-y: auto;
+  /* Ensure smooth scrolling on all browsers */
+  -webkit-overflow-scrolling: touch;
+  max-height: calc(80vh - 60px); /* Account for header */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d1d1;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
 /* Export-specific styling to ensure text visibility */
 .exporting * {
   font-family: var(--font-dincondensed), var(--font-oswald),

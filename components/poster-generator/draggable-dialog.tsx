@@ -50,7 +50,7 @@ export const DraggableDialog = ({
       initial={{ opacity: 0, x: initialPosition.x, y: initialPosition.y }}
       animate={{ opacity: 1, x: position.x, y: position.y }}
       exit={{ opacity: 0 }}
-      className="absolute top-0 left-0 w-[320px] max-h-[500px] z-40"
+      className="absolute top-0 left-0 w-[320px] z-40"
       style={{ x: position.x, y: position.y }}
       onDragEnd={(event, info) => {
         setPosition({
@@ -59,9 +59,9 @@ export const DraggableDialog = ({
         });
       }}
     >
-      <Card className="flex flex-col h-full overflow-hidden">
+      <Card className="flex flex-col max-h-[80vh] shadow-lg">
         <CardHeader
-          className="flex flex-row justify-between items-center p-3 border-b cursor-grab active:cursor-grabbing"
+          className="flex flex-row justify-between items-center p-3 border-b cursor-grab active:cursor-grabbing shrink-0"
           onPointerDown={(e) => controls.start(e)}
         >
           <div className="flex items-center gap-2">
@@ -78,7 +78,7 @@ export const DraggableDialog = ({
             <span className="sr-only">Close dialog</span>
           </Button>
         </CardHeader>
-        <CardContent className="p-4 overflow-y-auto flex-1">
+        <CardContent className="p-4 overflow-y-auto custom-scrollbar flex-grow">
           {children}
         </CardContent>
       </Card>
