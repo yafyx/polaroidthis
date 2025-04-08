@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import PosterGenerator from "@/components/poster-generator/poster-generator";
-import { ImageIcon, Loader2 } from "lucide-react";
+import { ImageIcon, Info, Loader2 } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function CreatePage() {
   const searchParams = useSearchParams();
@@ -195,43 +196,87 @@ export default function CreatePage() {
   return (
     <div className="bg-slate-50 min-h-[calc(100vh-4rem)]">
       <div className="container mx-auto px-4 py-8 max-w-5xl">
-        {/* Header Section */}
-        <header className="mb-4 flex items-start justify-between flex-wrap gap-4">
-          <div className="flex gap-2 items-center">
-            <div className="inline-block px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-sm text-xs text-slate-600">
-              <span className="font-medium">Tip:</span> Click the floating
-              buttons around the poster to edit
-            </div>
-          </div>
-        </header>
-
-        {/* Content Area */}
-        <div>
-          {isLoading ? (
-            <div className="flex justify-center items-center py-20">
-              <div className="flex flex-col items-center">
-                <div className="relative mb-4">
-                  <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center">
-                    <Loader2 className="h-8 w-8 text-primary animate-spin" />
-                  </div>
+        <div className="mb-4 lg:hidden">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <div className="bg-blue-100 p-1 rounded-full">
+                  <Info className="h-4 w-4" />
                 </div>
-                <h3 className="font-medium text-slate-700">
-                  Preparing Your Poster
-                </h3>
-                <p className="text-sm text-slate-500 mt-1">
-                  Loading movie details from database...
-                </p>
-              </div>
-            </div>
-          ) : (
-            <PosterGenerator
-              initialData={initialMovieData}
-              initialTab={initialTab}
-            />
-          )}
+                <span>Tips</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-1 pl-6 list-disc text-xs text-slate-600">
+                <li>
+                  Click the floating buttons around the poster to edit different
+                  elements
+                </li>
+                <li>
+                  If one input method doesn't work, try another (e.g., use
+                  search movie by title if URL fails)
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Footer Info */}
+        {/* Canvas */}
+        <div className="relative">
+          <div className="w-full">
+            {isLoading ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="flex flex-col items-center">
+                  <div className="relative mb-4">
+                    <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center">
+                      <Loader2 className="h-8 w-8 text-primary animate-spin" />
+                    </div>
+                  </div>
+                  <h3 className="font-medium text-slate-700">
+                    Preparing Your Poster
+                  </h3>
+                  <p className="text-sm text-slate-500 mt-1">
+                    Loading movie details from database...
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <PosterGenerator
+                initialData={initialMovieData}
+                initialTab={initialTab}
+              />
+            )}
+          </div>
+
+          <div
+            className="hidden lg:block absolute top-0 right-0 translate-x-full pl-4"
+            style={{ width: "250px" }}
+          >
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-sm">
+                  <div className="bg-blue-100 p-1 rounded-full">
+                    <Info className="h-4 w-4" />
+                  </div>
+                  <span>Tips</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-1 pl-6 list-disc text-xs text-slate-600">
+                  <li>
+                    Click the floating buttons around the poster to edit
+                    different elements
+                  </li>
+                  <li>
+                    If one input method doesn't work, try another (e.g., use
+                    search movie by title if URL fails)
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
         <div className="mt-6 text-center">
           <p className="text-xs text-slate-500">
             Created posters can be downloaded in high resolution, perfect for
