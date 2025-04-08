@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Loader2, Search, Film, Info, X } from "lucide-react";
-import type { MovieData } from "./poster-generator";
+import type { MovieData } from "./poster-generator/poster-generator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Command,

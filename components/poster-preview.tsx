@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
-import type { MovieData } from "./poster-generator";
+import type { MovieData } from "./poster-generator/poster-generator";
 import PolaroidPoster from "./polaroid-poster";
 
 interface PosterPreviewProps {

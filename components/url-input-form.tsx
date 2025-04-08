@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Link2, AlertCircle } from "lucide-react";
-import type { MovieData } from "./poster-generator";
+import type { MovieData } from "./poster-generator/poster-generator";
 import { Badge } from "@/components/ui/badge";
 
 interface UrlInputFormProps {

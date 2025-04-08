@@ -13,7 +13,7 @@ import {
   Check,
   RefreshCw,
 } from "lucide-react";
-import type { MovieData } from "./poster-generator";
+import type { MovieData } from "./poster-generator/poster-generator";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Tooltip,

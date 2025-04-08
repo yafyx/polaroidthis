@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import PosterGenerator from "@/components/poster-generator";
+import PosterGenerator from "@/components/poster-generator/poster-generator";
 import { ImageIcon, Loader2 } from "lucide-react";
 
 export default function CreatePage() {
