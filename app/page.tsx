@@ -85,7 +85,7 @@ export default function Home() {
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Just add your streaming URL to{" "}
               <code className="font-mono text-primary bg-primary/10 px-1.5 py-0.5 rounded text-base mx-1">
-                polaroidthis.tech
+                polaroidthis.studio
               </code>
             </p>
           </div>
@@ -106,7 +106,7 @@ export default function Home() {
                   <CardDescription>
                     Visit{" "}
                     <code className="font-mono text-primary bg-primary/10 px-1 py-0.5 rounded text-xs mx-0.5">
-                      polaroidthis.tech
+                      polaroidthis.studio
                     </code>{" "}
                     and paste your streaming service link to automatically
                     generate a polaroid poster.
@@ -124,7 +124,7 @@ export default function Home() {
                       <ArrowRight className="block sm:hidden h-4 w-4 text-slate-500 shrink-0 z-10 bg-slate-50 px-1 animate-pulse rotate-90" />
                     </div>
                     <span className="font-mono bg-primary/10 border border-primary/20 text-primary px-3 py-1.5 rounded text-xs font-medium flex-grow break-all text-center sm:text-left z-10 shadow-sm">
-                      polaroidthis.tech/netflix.com/title/...
+                      polaroidthis.studio/netflix.com/title/...
                     </span>
                   </div>
                   {/* Example 2 */}
@@ -137,7 +137,7 @@ export default function Home() {
                       <ArrowRight className="block sm:hidden h-4 w-4 text-slate-500 shrink-0 z-10 bg-slate-50 px-1 animate-pulse rotate-90" />
                     </div>
                     <span className="font-mono bg-primary/10 border border-primary/20 text-primary px-3 py-1.5 rounded text-xs font-medium flex-grow break-all text-center sm:text-left z-10 shadow-sm">
-                      polaroidthis.tech/primevideo.com/detail/...
+                      polaroidthis.studio/primevideo.com/detail/...
                     </span>
                   </div>
                 </div>
