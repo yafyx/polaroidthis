@@ -1,75 +1,152 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Camera, Code, Database, Film } from "lucide-react";
 
 export default function AboutPage() {
   return (
-    <div className="container mx-auto px-4 py-8 relative">
-      {/* Decorative elements */}
-      <div className="absolute top-20 right-10 hidden md:block">
-        <div className="w-12 h-12 border border-primary/10 rounded-full"></div>
-        <div className="w-8 h-8 border border-primary/10 rounded-full absolute top-2 left-2"></div>
-      </div>
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-12">
+        <header className="mb-12 relative">
+          <div className="h-1 w-16 bg-primary mb-4"></div>
+          <h1 className="text-4xl font-bold tracking-tight text-foreground/90">
+            About <span className="text-primary">polaroidthis</span>
+          </h1>
+        </header>
 
-      <div className="absolute top-40 left-0 h-40 w-px bg-gradient-to-b from-transparent via-primary/10 to-transparent hidden md:block"></div>
+        <main className="grid grid-cols-1 lg:grid-cols-5 gap-10 max-w-6xl mx-auto">
+          <div className="lg:col-span-3 space-y-8">
+            <div className="p-6 rounded-xl bg-card border border-border shadow-sm">
+              <p className="text-xl leading-relaxed text-card-foreground">
+                polaroidthis is a web application that allows movie enthusiasts
+                to create beautiful minimalist movie posters in a Polaroid
+                style.
+              </p>
+            </div>
 
-      <div className="absolute bottom-20 right-10 opacity-30 hidden md:block">
-        <Plus className="h-6 w-6 text-primary/20" strokeWidth={1} />
-      </div>
+            <section className="space-y-6">
+              <h2 className="text-2xl font-semibold flex items-center gap-3">
+                <div className="h-px w-6 bg-primary"></div>
+                Technology
+              </h2>
 
-      <div className="max-w-3xl mx-auto relative">
-        <div className="absolute top-0 left-0 w-10 h-px bg-primary"></div>
-        <h1 className="text-3xl font-bold mb-6 pt-2">About polaroidthis</h1>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 rounded-lg border border-border bg-card/80 flex items-start gap-3">
+                  <Code className="h-5 w-5 text-primary mt-0.5" />
+                  <div>
+                    <h3 className="font-medium">Next.js 15</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Server-side rendering and routing
+                    </p>
+                  </div>
+                </div>
 
-        <div className="prose prose-gray max-w-none relative">
-          {/* Replace grid pattern with line patterns */}
-          <div className="absolute -left-10 top-1/4 hidden md:block opacity-20">
-            <div className="w-6 h-px bg-primary/50"></div>
-            <div className="w-4 h-px bg-primary/50 mt-2"></div>
-            <div className="w-8 h-px bg-primary/50 mt-2"></div>
-            <div className="h-12 w-px bg-primary/50 absolute top-6 left-6"></div>
+                <div className="p-4 rounded-lg border border-border bg-card/80 flex items-start gap-3">
+                  <div className="h-5 w-5 text-primary mt-0.5 flex items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M6 2h12l4 8-10 13L2 10z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Tailwind CSS</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Utility-first styling framework
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-lg border border-border bg-card/80 flex items-start gap-3">
+                  <div className="h-5 w-5 text-primary mt-0.5 flex items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
+                      <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9" />
+                      <path d="M12 3v6" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-medium">shadcn/ui</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Reusable UI components
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-lg border border-border bg-card/80 flex items-start gap-3">
+                  <Database className="h-5 w-5 text-primary mt-0.5" />
+                  <div>
+                    <h3 className="font-medium">Vercel Functions</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Serverless API handling
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-lg border border-border bg-card/80 flex items-start gap-3">
+                  <Camera className="h-5 w-5 text-primary mt-0.5" />
+                  <div>
+                    <h3 className="font-medium">html2canvas</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Image generation
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section className="space-y-6">
+              <h2 className="text-2xl font-semibold flex items-center gap-3">
+                <div className="h-px w-6 bg-primary"></div>
+                Credits
+              </h2>
+
+              <div className="p-6 rounded-xl bg-card border border-border flex items-start gap-4">
+                <Film className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                <div>
+                  <p className="text-card-foreground">
+                    polaroidthis is powered by the TMDB API but is not endorsed
+                    or certified by TMDB.
+                  </p>
+                </div>
+              </div>
+            </section>
           </div>
 
-          <p className="text-lg">
-            polaroidthis is a web application that allows movie enthusiasts to
-            create beautiful minimalist movie posters in a Polaroid style.
-          </p>
+          <div className="lg:col-span-2 flex flex-col justify-center mt-8 lg:mt-0">
+            <div className="p-8 rounded-xl border border-primary/50 bg-card shadow-sm">
+              <h3 className="text-xl font-semibold mb-4">Ready to create?</h3>
+              <p className="text-muted-foreground mb-6">
+                Turn your favorite movies into beautiful Polaroid-style posters
+                with just a few clicks.
+              </p>
 
-          <h2 className="text-2xl font-semibold mt-8 mb-4 flex items-center">
-            <div className="w-4 h-px bg-primary mr-2"></div>
-            Technology
-          </h2>
-          <p>polaroidthis is built with modern web technologies:</p>
-          <ul className="list-disc pl-6 space-y-2">
-            <li>Next.js 15 for server-side rendering and routing</li>
-            <li>Tailwind CSS for styling</li>
-            <li>shadcn/ui for UI components</li>
-            <li>Vercel Serverless Functions for API handling</li>
-            <li>html2canvas for image generation</li>
-          </ul>
-
-          <h2 className="text-2xl font-semibold mt-8 mb-4 flex items-center">
-            <div className="w-4 h-px bg-primary mr-2"></div>
-            Credits
-          </h2>
-          <p>
-            polaroidthis is powered by the TMDB API but is not endorsed or
-            certified by TMDB. This product uses the TMDB API but is not
-            endorsed or certified by TMDB.
-          </p>
-
-          <div className="mt-10 text-center relative">
-            {/* Decorative border */}
-            <div className="absolute -inset-4 border border-primary/5 rounded-md"></div>
-
-            <Button asChild size="lg" className="relative">
-              <Link href="/create" className="flex items-center gap-2">
-                <Plus className="h-4 w-4" />
-                Create Your Poster Now
-              </Link>
-            </Button>
+              <Button asChild size="lg" className="w-full gap-2">
+                <Link href="/create">
+                  <Plus className="h-4 w-4" />
+                  Create Your Poster Now
+                </Link>
+              </Button>
+            </div>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );

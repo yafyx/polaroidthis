@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Film, Heart, Github, Twitter, Plus } from "lucide-react";
 import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 
 export default function Footer() {
   return (
@@ -61,6 +62,12 @@ export default function Footer() {
                 width={80}
                 height={80}
               />
+            </div>
+
+            <div className="relative -left-4">
+              <Badge variant="default" className="text-[10px]">
+                BETA
+              </Badge>
             </div>
           </div>
 

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -59,6 +60,16 @@ export default function Navbar() {
                 <div className="w-1.5 h-0.5 bg-primary"></div>
                 <div className="w-0.5 h-1.5 bg-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
               </div>
+            </div>
+
+            {/* Beta Badge */}
+            <div className="relative">
+              <Badge
+                variant="default"
+                className="absolute -top-6 -left-4 text-[10px] animate-pulse"
+              >
+                BETA
+              </Badge>
             </div>
           </Link>
 
